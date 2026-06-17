@@ -1,58 +1,91 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# MyFarmHand ERP 🌾
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**MyFarmHand** is a comprehensive Enterprise Resource Planning (ERP) application designed specifically for modern agricultural operations. It brings institutional-grade efficiency to farm management by centralizing inventory, production yields, payroll, and daily tasks into a single, clean, and professional dashboard.
 
-## About Laravel
+## 🚀 Tech Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This project was built and migrated from vanilla PHP to a robust modern web stack:
+- **Backend:** Laravel (PHP)
+- **Frontend:** React + Inertia.js
+- **Styling:** Tailwind CSS (Corporate Flat Design)
+- **Charts:** Recharts (Data visualization)
+- **Database:** MySQL
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠️ Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* **Role-Based Access Control (RBAC):** Segregated dashboards for `Admin`, `Managing Director`, `Store Keeper`, and `Accountant`.
+* **Inventory Control:** Track feed, livestock, and supplies with automated low-stock threshold alerts.
+* **Production & Yield Tracking:** Log daily yields (Eggs, Milk, Crops), track batch mortality rates, and analyze performance across departments.
+* **Financial Ledger:** Keep a detailed record of operational expenses and sales revenue for full P&L reports.
+* **Task Management:** Assign and monitor daily farm operations and work orders.
+* **Analytics Dashboard:** Real-time visual tracking of yields, burn rates, and financial health.
 
-## Learning Laravel
+## ⚙️ Local Development Setup
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Follow these instructions to run the project locally.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prerequisites
+* PHP 8.2+
+* Composer
+* Node.js & npm
+* MySQL / MariaDB (e.g., via MAMP or XAMPP)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Installation Steps
 
-## Agentic Development
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/MyFarmHand.git
+   cd MyFarmHand
+   ```
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+2. **Install PHP and Node dependencies:**
+   ```bash
+   composer install
+   npm install --legacy-peer-deps
+   ```
 
-```bash
-composer require laravel/boost --dev
+3. **Environment Setup:**
+   Duplicate the `.env.example` file and rename it to `.env`, or manually create the `.env` file. Update your database credentials:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=8889  # Use 3306 if not using MAMP
+   DB_DATABASE=myfarmhand
+   DB_USERNAME=root
+   DB_PASSWORD=root
+   ```
 
-php artisan boost:install
-```
+4. **Generate App Key:**
+   ```bash
+   php artisan key:generate
+   ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+5. **Run Database Migrations and Seeders:**
+   This will create the necessary tables and populate the default Roles and the default Admin user.
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+   **Default Admin Credentials:**
+   * **Email:** `admin@myfarmhand.com`
+   * **Password:** `Admin123!`
 
-## Contributing
+6. **Start the Development Servers:**
+   You will need to run both the Laravel backend and the Vite frontend compiler simultaneously:
+   
+   *Terminal 1 (Backend):*
+   ```bash
+   php artisan serve
+   ```
+   *Terminal 2 (Frontend):*
+   ```bash
+   npm run dev
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+7. **Access the Application:**
+   Open your browser and navigate to [http://localhost:8000](http://localhost:8000).
 
-## Code of Conduct
+## 🔒 Security
+Authentication and session management is securely handled by Laravel Breeze. Passwords are encrypted using Bcrypt. 
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📝 License
+This project is proprietary software designed for internal agricultural management.
