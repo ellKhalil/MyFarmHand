@@ -14,14 +14,39 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Inventory
+    Route::get('/inventory', [\App\Http\Controllers\InventoryItemController::class, 'index'])->name('inventory.index');
+    Route::post('/inventory/items', [\App\Http\Controllers\InventoryItemController::class, 'store'])->name('inventory.store');
+    Route::post('/inventory/items/{item}/transaction', [\App\Http\Controllers\InventoryItemController::class, 'logTransaction'])->name('inventory.transaction');
+
+    // Production
+    Route::post('/production/batches', [\App\Http\Controllers\ProductionController::class, 'storeBatch'])->name('production.batch.store');
+    Route::post('/production/batches/{batch}/log', [\App\Http\Controllers\ProductionController::class, 'logProduction'])->name('production.log.store');
+
+    // Tasks
+    Route::get('/tasks', [\App\Http\Controllers\TaskController::class, 'index'])->name('tasks.index');
+    Route::post('/tasks', [\App\Http\Controllers\TaskController::class, 'store'])->name('tasks.store');
+    Route::patch('/tasks/{task}/status', [\App\Http\Controllers\TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
+
+    // Payroll
+    Route::post('/payroll/generate', [\App\Http\Controllers\PayrollController::class, 'generate'])->name('payroll.generate');
+    Route::post('/payroll/{payroll}/paid', [\App\Http\Controllers\PayrollController::class, 'markAsPaid'])->name('payroll.paid');
+
+    // Financial Ledger
+    Route::get('/finance', [\App\Http\Controllers\FinancialTransactionController::class, 'index'])->name('finance.index');
+    Route::post('/finance/transactions', [\App\Http\Controllers\FinancialTransactionController::class, 'store'])->name('finance.transaction.store');
+
+    // Analytics
+    Route::get('/api/analytics', [\App\Http\Controllers\AnalyticsController::class, 'getChartData'])->name('analytics.data');
 });
 
 require __DIR__.'/auth.php';
