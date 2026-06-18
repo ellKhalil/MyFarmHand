@@ -12,11 +12,24 @@ use Illuminate\Support\Facades\Auth;
 
 class InventoryItemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $items = InventoryItem::withCount('transactions')->get();
+        $query = InventoryItem::withCount('transactions');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('item_name', 'like', "%{$search}%")
+                  ->orWhere('category', 'like', "%{$search}%");
+        }
+
+        $sortField = $request->input('sort_field', 'item_name');
+        $sortDirection = $request->input('sort_direction', 'asc');
+
+        $items = $query->orderBy($sortField, $sortDirection)->paginate(10)->withQueryString();
+
         return Inertia::render('Modules/Inventory', [
-            'inventory' => $items
+            'inventory' => $items,
+            'filters' => $request->only(['search', 'sort_field', 'sort_direction'])
         ]);
     }
 

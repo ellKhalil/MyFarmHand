@@ -12,9 +12,21 @@ use Illuminate\Support\Facades\DB;
 
 class PayrollController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::orderBy('name')->get();
+        $query = User::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%")
+                  ->orWhere('department', 'like', "%{$search}%");
+        }
+
+        $sortField = $request->input('sort_field', 'name');
+        $sortDirection = $request->input('sort_direction', 'asc');
+
+        $users = $query->orderBy($sortField, $sortDirection)->paginate(10)->withQueryString();
+
         // Get the current month's payrolls
         $payrolls = Payroll::where('month', date('n'))
                            ->where('year', date('Y'))
@@ -24,7 +36,8 @@ class PayrollController extends Controller
         return Inertia::render('Modules/Payroll', [
             'users' => $users,
             'currentMonthPayrolls' => $payrolls,
-            'currentMonth' => date('F Y')
+            'currentMonth' => date('F Y'),
+            'filters' => $request->only(['search', 'sort_field', 'sort_direction'])
         ]);
     }
 
@@ -63,7 +76,7 @@ class PayrollController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
-    public function generate(Request $request)
+    public function pay(Request $request)
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
@@ -79,37 +92,39 @@ class PayrollController extends Controller
         $deductionsTotal = collect($validated['deductions'] ?? [])->sum('amount');
         $netPayable = $validated['base_pay'] + $allowancesTotal + ($validated['bonuses'] ?? 0) - $deductionsTotal;
 
-        $payroll = Payroll::create([
-            'user_id' => $validated['user_id'],
-            'month' => $validated['month'],
-            'year' => $validated['year'],
-            'base_pay' => $validated['base_pay'],
-            'allowances' => $validated['allowances'] ?? [],
-            'deductions' => $validated['deductions'] ?? [],
-            'bonuses' => $validated['bonuses'] ?? 0,
-            'net_payable' => $netPayable,
-            'payment_status' => 'Pending',
-        ]);
-
-        return redirect()->back()->with('success', 'Payroll slip generated successfully.');
-    }
-
-    public function markAsPaid(Request $request, Payroll $payroll)
-    {
-        DB::transaction(function () use ($payroll) {
-            $payroll->update(['payment_status' => 'Paid']);
+        DB::transaction(function () use ($validated, $netPayable) {
+            $payroll = Payroll::create([
+                'user_id' => $validated['user_id'],
+                'month' => $validated['month'],
+                'year' => $validated['year'],
+                'base_pay' => $validated['base_pay'],
+                'allowances' => $validated['allowances'] ?? [],
+                'deductions' => $validated['deductions'] ?? [],
+                'bonuses' => $validated['bonuses'] ?? 0,
+                'net_payable' => $netPayable,
+                'payment_status' => 'Paid',
+            ]);
 
             // Automatically log this into the financial ledger as an expense
+            $user = User::find($validated['user_id']);
             FinancialTransaction::create([
                 'type' => 'Expense',
-                'amount' => $payroll->net_payable,
+                'amount' => $netPayable,
                 'category' => 'Payroll',
-                'description' => "Salary payment for {$payroll->user->name} ({$payroll->month}/{$payroll->year})",
+                'description' => "Salary payment for {$user->name} ({$payroll->month}/{$payroll->year})",
                 'transaction_date' => now(),
                 'logged_by' => Auth::id(),
             ]);
         });
 
-        return redirect()->back()->with('success', 'Payroll marked as paid and recorded in ledger.');
+        return redirect()->back()->with('success', 'Employee marked as paid and logged in ledger.');
+    }
+
+    public function payslip(Payroll $payroll)
+    {
+        $payroll->load('user');
+        return Inertia::render('Modules/Payslip', [
+            'payroll' => $payroll,
+        ]);
     }
 }

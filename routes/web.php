@@ -40,8 +40,8 @@ Route::middleware('auth')->group(function () {
     // Payroll
     Route::get('/payroll', [\App\Http\Controllers\PayrollController::class, 'index'])->name('payroll.index');
     Route::get('/payroll/export', [\App\Http\Controllers\PayrollController::class, 'export'])->name('payroll.export');
-    Route::post('/payroll/generate', [\App\Http\Controllers\PayrollController::class, 'generate'])->name('payroll.generate');
-    Route::post('/payroll/{payroll}/paid', [\App\Http\Controllers\PayrollController::class, 'markAsPaid'])->name('payroll.paid');
+    Route::get('/payroll/{payroll}/slip', [\App\Http\Controllers\PayrollController::class, 'payslip'])->name('payroll.slip');
+    Route::post('/payroll/pay', [\App\Http\Controllers\PayrollController::class, 'pay'])->name('payroll.pay');
 
     // Users & Employees
     Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
@@ -53,6 +53,12 @@ Route::middleware('auth')->group(function () {
 
     // Analytics
     Route::get('/api/analytics', [\App\Http\Controllers\AnalyticsController::class, 'getChartData'])->name('analytics.data');
+
+    // Settings
+    Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
+    Route::post('/settings/departments', [\App\Http\Controllers\SettingsController::class, 'storeDepartment'])->name('settings.departments.store');
+    Route::put('/settings/departments/{department}', [\App\Http\Controllers\SettingsController::class, 'updateDepartment'])->name('settings.departments.update');
+    Route::delete('/settings/departments/{department}', [\App\Http\Controllers\SettingsController::class, 'destroyDepartment'])->name('settings.departments.destroy');
 });
 
 require __DIR__.'/auth.php';

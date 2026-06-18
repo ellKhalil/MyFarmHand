@@ -10,11 +10,24 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::orderBy('created_at', 'desc')->get();
+        $query = Task::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+        }
+
+        $sortField = $request->input('sort_field', 'created_at');
+        $sortDirection = $request->input('sort_direction', 'desc');
+
+        $tasks = $query->orderBy($sortField, $sortDirection)->paginate(10)->withQueryString();
+
         return Inertia::render('Modules/Tasks', [
-            'tasks' => $tasks
+            'tasks' => $tasks,
+            'filters' => $request->only(['search', 'sort_field', 'sort_direction'])
         ]);
     }
     public function store(Request $request)

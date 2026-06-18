@@ -68,16 +68,29 @@ export default function AuthenticatedLayout({ header, children }) {
                         <li>
                             <Link href={route('tasks.index')} className={`flex items-center gap-3 px-4 py-3 rounded-md transition ${route().current('tasks.index') ? 'bg-green-800 text-white font-medium' : 'hover:bg-green-800 text-green-100'}`}>
                                 <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                                Tasks & Orders
+                                Tasks
                             </Link>
                         </li>
                         <li>
-                            <Link href={route('users.index')} className={`flex items-center gap-3 px-4 py-3 rounded-md transition ${route().current('users.index') ? 'bg-green-800 text-white font-medium' : 'hover:bg-green-800 text-green-100'}`}>
-                                <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            <Link href={route('users.index')} className={`flex items-center w-full px-4 py-2 mt-2 rounded-sm transition-colors duration-200 ${route().current('users.index') ? 'bg-green-100 text-green-900 font-bold border-l-4 border-green-600' : 'text-gray-700 hover:bg-green-50 hover:text-green-800'}`}>
+                                <svg className="w-5 h-5 mr-3 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                 Team & Users
                             </Link>
                         </li>
                     </ul>
+                    
+                    {/* NEW: Settings Section at bottom of sidebar */}
+                    <div className="mt-8 px-4">
+                        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Configuration</h3>
+                        <ul className="space-y-1">
+                            <li>
+                                <Link href={route('settings.index')} className={`flex items-center w-full px-4 py-2 mt-2 rounded-sm transition-colors duration-200 ${route().current('settings.index') ? 'bg-gray-100 text-gray-900 font-bold border-l-4 border-gray-600' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-800'}`}>
+                                    <svg className="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    Settings
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
                 </nav>
 
                 <div className="p-4 border-t border-green-800 text-sm text-green-300">
@@ -110,10 +123,10 @@ export default function AuthenticatedLayout({ header, children }) {
                         <Dropdown>
                             <Dropdown.Trigger>
                                 <button type="button" className="inline-flex items-center gap-2 border-l pl-6 border-gray-200 text-sm font-medium leading-4 text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                    <div className="w-8 h-8 rounded-full bg-green-100 text-green-800 flex items-center justify-center font-bold">
-                                        P
+                                    <div className="w-8 h-8 rounded-full bg-green-100 text-green-800 flex items-center justify-center font-bold uppercase">
+                                        {usePage().props.auth.user.name.charAt(0)}
                                     </div>
-                                    <span>Profile</span>
+                                    <span>{usePage().props.auth.user.name}</span>
                                     <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                                     </svg>
@@ -133,12 +146,24 @@ export default function AuthenticatedLayout({ header, children }) {
                 {/* Mobile Menu Dropdown */}
                 <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' md:hidden bg-green-800 absolute w-full z-20'}>
                     <div className="pt-2 pb-3 space-y-1">
-                        <Link href={route('dashboard')} className="block pl-3 pr-4 py-2 border-l-4 border-green-400 text-base font-medium text-white bg-green-900 focus:outline-none focus:text-white focus:bg-green-700 focus:border-green-300 transition duration-150 ease-in-out">
+                        <Link href={route('dashboard')} className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out ${route().current('dashboard') ? 'border-green-400 text-white bg-green-900 focus:bg-green-700 focus:border-green-300' : 'border-transparent text-green-200 hover:text-white hover:bg-green-700 focus:text-white focus:bg-green-700'}`}>
                             Dashboard
                         </Link>
-                        <a href="#" className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-green-200 hover:text-white hover:bg-green-700 focus:outline-none focus:text-white focus:bg-green-700 transition duration-150 ease-in-out">
+                        <Link href={route('inventory.index')} className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out ${route().current('inventory.*') ? 'border-green-400 text-white bg-green-900 focus:bg-green-700 focus:border-green-300' : 'border-transparent text-green-200 hover:text-white hover:bg-green-700 focus:text-white focus:bg-green-700'}`}>
                             Inventory
-                        </a>
+                        </Link>
+                        <Link href={route('payroll.index')} className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out ${route().current('payroll.*') ? 'border-green-400 text-white bg-green-900 focus:bg-green-700 focus:border-green-300' : 'border-transparent text-green-200 hover:text-white hover:bg-green-700 focus:text-white focus:bg-green-700'}`}>
+                            Payroll Management
+                        </Link>
+                        <Link href={route('finance.index')} className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out ${route().current('finance.*') ? 'border-green-400 text-white bg-green-900 focus:bg-green-700 focus:border-green-300' : 'border-transparent text-green-200 hover:text-white hover:bg-green-700 focus:text-white focus:bg-green-700'}`}>
+                            Financial Ledger
+                        </Link>
+                        <Link href={route('tasks.index')} className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out ${route().current('tasks.*') ? 'border-green-400 text-white bg-green-900 focus:bg-green-700 focus:border-green-300' : 'border-transparent text-green-200 hover:text-white hover:bg-green-700 focus:text-white focus:bg-green-700'}`}>
+                            Tasks & Orders
+                        </Link>
+                        <Link href={route('users.index')} className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out ${route().current('users.*') ? 'border-green-400 text-white bg-green-900 focus:bg-green-700 focus:border-green-300' : 'border-transparent text-green-200 hover:text-white hover:bg-green-700 focus:text-white focus:bg-green-700'}`}>
+                            Team & Users
+                        </Link>
                     </div>
                     <div className="pt-4 pb-1 border-t border-green-700">
                         <div className="mt-3 space-y-1">
