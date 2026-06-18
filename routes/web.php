@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/tasks/{task}/status', [\App\Http\Controllers\TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
 
     // Payroll
+    Route::get('/payroll', [\App\Http\Controllers\PayrollController::class, 'index'])->name('payroll.index');
+    Route::get('/payroll/export', [\App\Http\Controllers\PayrollController::class, 'export'])->name('payroll.export');
     Route::post('/payroll/generate', [\App\Http\Controllers\PayrollController::class, 'generate'])->name('payroll.generate');
     Route::post('/payroll/{payroll}/paid', [\App\Http\Controllers\PayrollController::class, 'markAsPaid'])->name('payroll.paid');
 

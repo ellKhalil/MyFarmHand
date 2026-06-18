@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('phone_number', 20)->nullable();
             $table->text('address')->nullable();
             $table->date('hire_date')->nullable();
-            $table->enum('department', ['Poultry', 'Aquaculture', 'Dairy', 'Crops'])->nullable();
+            $table->string('department')->nullable();
             $table->decimal('base_salary', 10, 2)->default(0.00);
             $table->rememberToken();
             $table->timestamps();

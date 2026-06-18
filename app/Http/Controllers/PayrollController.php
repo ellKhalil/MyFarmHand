@@ -12,6 +12,57 @@ use Illuminate\Support\Facades\DB;
 
 class PayrollController extends Controller
 {
+    public function index()
+    {
+        $users = User::orderBy('name')->get();
+        // Get the current month's payrolls
+        $payrolls = Payroll::where('month', date('n'))
+                           ->where('year', date('Y'))
+                           ->get()
+                           ->keyBy('user_id');
+
+        return Inertia::render('Modules/Payroll', [
+            'users' => $users,
+            'currentMonthPayrolls' => $payrolls,
+            'currentMonth' => date('F Y')
+        ]);
+    }
+
+    public function export()
+    {
+        $users = User::with('role')->orderBy('name')->get();
+        $filename = "Rahinatu_Farms_Salary_Structure_" . date('Y-m-d') . ".csv";
+        
+        $headers = [
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ];
+
+        $columns = ['S/No', 'Name', 'Department/Section', 'Role', 'Hire Date', 'Base Salary (N)'];
+
+        $callback = function() use($users, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            $count = 1;
+            foreach ($users as $user) {
+                $row['S/No']  = $count++;
+                $row['Name']    = $user->name;
+                $row['Department']  = $user->department ?: 'N/A';
+                $row['Role']  = $user->role ? $user->role->role_name : 'N/A';
+                $row['Hire Date']  = $user->hire_date ?: 'N/A';
+                $row['Base Salary (N)']  = $user->base_salary;
+
+                fputcsv($file, array($row['S/No'], $row['Name'], $row['Department'], $row['Role'], $row['Hire Date'], $row['Base Salary (N)']));
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
     public function generate(Request $request)
     {
         $validated = $request->validate([
