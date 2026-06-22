@@ -16,7 +16,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3' # Upgraded to match your modern package syntax
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -24,7 +24,7 @@ jobs:
           node-version: '20'
 
       - name: Install Composer Dependencies
-        run: composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+        run: composer install --no-dev --optimize-autoloader # Removed --ignore-platform-reqs to keep it stable
 
       - name: Install NPM Dependencies
         run: npm install
@@ -39,5 +39,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
-          server-dir: public_html/
+          server-dir: ./ 
           dangerous-clean-slate: false
