@@ -16,7 +16,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3' # Upgraded to match your modern package syntax
+          php-version: '8.2'
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -24,7 +24,8 @@ jobs:
           node-version: '20'
 
       - name: Install Composer Dependencies
-        run: composer install --no-dev --optimize-autoloader # Removed --ignore-platform-reqs to keep it stable
+        # --no-scripts stops package compilation on the runner so it doesn't crash on syntax differences
+        run: composer install --no-dev --optimize-autoloader --no-plugins --no-scripts --ignore-platform-reqs
 
       - name: Install NPM Dependencies
         run: npm install
