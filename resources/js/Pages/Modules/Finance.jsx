@@ -51,7 +51,7 @@ export default function Finance({ transactions, filters = {} }) {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8">
                     
                     {/* Recent Transactions Table */}
-                    <div className="bg-white shadow-sm border border-gray-200 rounded-sm overflow-hidden">
+                    <div className="bg-white shadow-sm border border-gray-200 rounded-sm overflow-visible">
                         <div className="p-6 border-b bg-gray-50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                             <h3 className="text-lg font-bold text-gray-800">Recent Transactions</h3>
                             <form onSubmit={handleSearch} className="flex flex-col sm:flex-row w-full sm:w-auto gap-3">
@@ -92,7 +92,7 @@ export default function Finance({ transactions, filters = {} }) {
                                 </div>
                             </form>
                         </div>
-                        <div className="hidden md:block overflow-x-auto">
+                        <div className="hidden md:block overflow-visible">
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-100">
                                     <tr>

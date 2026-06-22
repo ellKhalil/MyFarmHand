@@ -82,6 +82,19 @@ class InventoryItemController extends Controller
             'notes' => $validated['notes'],
         ]);
 
+        // Auto-log to Financial Ledger if it is a Restock (Purchase)
+        if ($validated['action_type'] === 'Restock' && $item->cost_per_unit > 0) {
+            $cost = $validated['quantity_changed'] * $item->cost_per_unit;
+            \App\Models\FinancialTransaction::create([
+                'type' => 'Expense',
+                'amount' => $cost,
+                'category' => 'Inventory Purchase',
+                'description' => "Purchased {$validated['quantity_changed']} {$item->unit} of {$item->item_name}",
+                'transaction_date' => now(),
+                'logged_by' => Auth::id(),
+            ]);
+        }
+
         // Low stock check
         if ($newQuantity <= $item->low_stock_threshold) {
             $this->triggerLowStockAlert($item);
