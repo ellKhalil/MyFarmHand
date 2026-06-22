@@ -13,9 +13,7 @@ export default function Welcome({ auth }) {
                             <div className="flex-shrink-0 flex items-center">
                                 {/* Text Logo */}
                                 <span className="text-green-800 text-3xl font-extrabold tracking-tight flex items-center gap-2">
-                                    <svg className="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                                    </svg>
+                                    <img src="/logo.png" alt="MyFarmHand" className="w-10 h-10 object-contain" />
                                     MyFarmHand
                                 </span>
                             </div>
@@ -138,7 +136,7 @@ export default function Welcome({ auth }) {
                                     </div>
                                     <h3 className="text-2xl font-bold text-gray-900 mb-3">Inventory Dynamics</h3>
                                     <p className="text-gray-600 leading-relaxed">
-                                        Log raw materials, feed, and medical supplies. Configure low-stock thresholds to receive automated procurement alerts before operations are disrupted.
+                                        Log raw materials, feed, and medical supplies. Configure low-stock thresholds to receive automated procurement alerts. <span className="font-semibold text-green-700">New:</span> Purchasing inventory automatically registers expenses in the Financial Ledger to prevent double-entry.
                                     </p>
                                 </div>
 
@@ -164,7 +162,7 @@ export default function Welcome({ auth }) {
                                     </div>
                                     <h3 className="text-2xl font-bold text-gray-900 mb-3">Financial Ledger (P&L)</h3>
                                     <p className="text-gray-600 leading-relaxed">
-                                        Immutable records of operational expenditures and revenue generation. Instantly generate Profit & Loss statements for quarterly audits.
+                                        Immutable records of operational expenditures and revenue generation. The ledger automatically syncs with Payroll and Inventory purchases, allowing Accountants to instantly generate accurate Profit & Loss statements.
                                     </p>
                                 </div>
 
@@ -190,7 +188,7 @@ export default function Welcome({ auth }) {
                                     </div>
                                     <h3 className="text-2xl font-bold text-gray-900 mb-3">Automated Payroll</h3>
                                     <p className="text-gray-600 leading-relaxed">
-                                        Calculate net payables based on base salaries, custom allowances, and automated deductions. Streamline month-end accounting.
+                                        Calculate net payables based on strictly-enforced departmental base salaries. Automated deductions and one-click payouts ensure immediate synchronization with the main financial ledger.
                                     </p>
                                 </div>
 
@@ -241,24 +239,12 @@ export default function Welcome({ auth }) {
                                     </ul>
                                 </div>
                                 <div className="mt-10 md:mt-0 md:w-1/2">
-                                    <div className="bg-gray-100 p-8 rounded-sm border border-gray-200 shadow-inner">
-                                        {/* Abstract UI representation */}
-                                        <div className="space-y-4">
-                                            <div className="h-8 bg-gray-300 rounded w-1/3"></div>
-                                            <div className="h-4 bg-gray-300 rounded w-1/2"></div>
-                                            <div className="grid grid-cols-2 gap-4 pt-6">
-                                                <div className="h-24 bg-white border border-gray-200 shadow-sm rounded"></div>
-                                                <div className="h-24 bg-white border border-gray-200 shadow-sm rounded"></div>
-                                                <div className="h-24 bg-white border border-green-500 shadow-sm rounded relative overflow-hidden">
-                                                    <div className="absolute top-0 right-0 p-2 text-green-600 text-xs font-bold bg-green-100 border-b border-l border-green-200">Authorized</div>
-                                                </div>
-                                                <div className="h-24 bg-white border border-gray-200 shadow-sm rounded relative overflow-hidden">
-                                                    <div className="absolute inset-0 bg-gray-50 bg-opacity-70 flex items-center justify-center">
-                                                        <span className="text-gray-400 text-sm font-semibold">Restricted</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div className="bg-gray-100 p-2 sm:p-4 rounded-lg border border-gray-200 shadow-inner">
+                                        <img 
+                                            src="/rbac_ui.png" 
+                                            alt="RBAC Dashboard Interface" 
+                                            className="w-full h-auto rounded-md shadow-md border border-gray-300 object-cover"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -284,19 +270,65 @@ export default function Welcome({ auth }) {
                     </div>
                 </main>
                 
-                {/* Footer */}
-                <footer className="bg-gray-900">
-                    <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-                        <div className="flex justify-between items-center">
-                            <span className="text-white text-xl font-bold flex items-center gap-2">
-                                <svg className="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                                </svg>
-                                MyFarmHand
-                            </span>
-                            <p className="text-sm text-gray-400">
+                {/* Comprehensive Footer */}
+                <footer className="bg-gray-900 border-t border-gray-800">
+                    <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+                            <div className="col-span-1 md:col-span-1">
+                                <span className="text-white text-xl font-bold flex items-center gap-2 mb-4">
+                                    <img src="/logo.png" alt="MyFarmHand" className="w-8 h-8 object-contain" />
+                                    MyFarmHand
+                                </span>
+                                <p className="text-gray-400 text-sm leading-relaxed">
+                                    The intelligent operating system for modern agriculture. Unifying teams, automating ledgers, and delivering real-time actionable insights.
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h3 className="text-sm font-semibold text-gray-300 tracking-wider uppercase mb-4">Solutions</h3>
+                                <ul className="space-y-3">
+                                    <li><a href="#" className="text-sm text-gray-400 hover:text-green-400 transition">Inventory Tracking</a></li>
+                                    <li><a href="#" className="text-sm text-gray-400 hover:text-green-400 transition">Automated Payroll</a></li>
+                                    <li><a href="#" className="text-sm text-gray-400 hover:text-green-400 transition">Financial Ledgers</a></li>
+                                    <li><a href="#" className="text-sm text-gray-400 hover:text-green-400 transition">Task Delegation</a></li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 className="text-sm font-semibold text-gray-300 tracking-wider uppercase mb-4">Company</h3>
+                                <ul className="space-y-3">
+                                    <li><a href="#" className="text-sm text-gray-400 hover:text-green-400 transition">About Us</a></li>
+                                    <li><a href="#" className="text-sm text-gray-400 hover:text-green-400 transition">Careers</a></li>
+                                    <li><a href="#" className="text-sm text-gray-400 hover:text-green-400 transition">Contact</a></li>
+                                    <li><a href="#" className="text-sm text-gray-400 hover:text-green-400 transition">Partners</a></li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 className="text-sm font-semibold text-gray-300 tracking-wider uppercase mb-4">Stay Updated</h3>
+                                <p className="text-sm text-gray-400 mb-4">Subscribe to our newsletter for the latest updates.</p>
+                                <form className="flex">
+                                    <input type="email" placeholder="Email address" className="bg-gray-800 border-gray-700 text-white w-full rounded-l-md focus:ring-green-500 focus:border-green-500 sm:text-sm px-4 py-2" />
+                                    <button type="submit" className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-r-md text-sm font-medium transition">
+                                        Subscribe
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <p className="text-sm text-gray-500">
                                 &copy; {new Date().getFullYear()} MyFarmHand Enterprise Management. All rights reserved.
                             </p>
+                            <div className="flex space-x-6">
+                                <a href="#" className="text-gray-500 hover:text-white transition">
+                                    <span className="sr-only">Twitter</span>
+                                    <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg>
+                                </a>
+                                <a href="#" className="text-gray-500 hover:text-white transition">
+                                    <span className="sr-only">LinkedIn</span>
+                                    <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd" /></svg>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </footer>

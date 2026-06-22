@@ -39,10 +39,10 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           local-dir: ./
-          server-dir: ./ 
+          # Change this to climb out of the restricted 'khalil_github' folder:
+          server-dir: ../ 
           dangerous-clean-slate: false
-          # Network & Firewall Bypass Flags:
           protocol: ftp
           port: 21
           passive: true
-          timeout: 60000 # Extends connection wait time to 60 seconds
+          timeout: 60000
