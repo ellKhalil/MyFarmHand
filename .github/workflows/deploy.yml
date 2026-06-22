@@ -32,13 +32,17 @@ jobs:
       - name: Build React Assets
         run: npm run build
 
-      - name: Deploy to cPanel Subdomain
-        uses: Aki77/ftp-deploy-action@v1
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          host: ${{ secrets.SERVER }}
+          server: ${{ secrets.SERVER }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          # Explicitly target everything built in the local runner path
           local-dir: ./
-          # Use empty rule since the cPanel user is jailed to the target folder
-          remote-dir: ./
+          # Change this to climb out of the restricted 'khalil_github' folder:
+          server-dir: ../ 
+          dangerous-clean-slate: false
+          protocol: ftp
+          port: 21
+          passive: true
+          timeout: 60000
