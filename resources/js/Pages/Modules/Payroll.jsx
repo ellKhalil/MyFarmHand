@@ -151,26 +151,25 @@ export default function Payroll({ users = [], currentMonthPayrolls = {}, current
                                                                     </svg>
                                                                 </button>
                                                             </Dropdown.Trigger>
-                                                            <Dropdown.Content align="right" width="48">
-                                                                {!payroll ? (
-                                                                    <button 
-                                                                        onClick={() => payEmployee(user.id, user.base_salary)}
-                                                                        disabled={processing}
-                                                                        className="block w-full px-4 py-2 text-start text-sm leading-5 text-green-600 font-medium hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition duration-150 ease-in-out"
-                                                                    >
-                                                                        Mark as Paid
-                                                                    </button>
-                                                                ) : (
-                                                                    <a 
-                                                                        href={route('payroll.slip', payroll.id)} 
-                                                                        target="_blank" 
-                                                                        rel="noopener noreferrer"
-                                                                        className="block w-full px-4 py-2 text-start text-sm leading-5 text-blue-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition duration-150 ease-in-out"
-                                                                    >
-                                                                        Print Payslip
-                                                                    </a>
-                                                                )}
-                                                            </Dropdown.Content>
+                                                                <Dropdown.Content align="left" width="48">
+                                                                    <div className="py-1">
+                                                                        <button 
+                                                                            onClick={() => payEmployee(user.id, user.base_salary)}
+                                                                            disabled={!!payroll || processing}
+                                                                            className={`block w-full px-4 py-2 text-start text-sm leading-5 font-medium transition duration-150 ease-in-out ${!payroll ? 'text-green-600 hover:bg-gray-100 focus:bg-gray-100' : 'text-gray-400 cursor-not-allowed'}`}
+                                                                        >
+                                                                            {payroll ? 'Payment Completed' : 'Pay Employee'}
+                                                                        </button>
+                                                                        <a 
+                                                                            href={payroll ? route('payroll.slip', payroll.id) : '#'} 
+                                                                            target={payroll ? "_blank" : "_self"}
+                                                                            rel="noopener noreferrer"
+                                                                            className={`block w-full px-4 py-2 text-start text-sm leading-5 font-medium transition duration-150 ease-in-out ${payroll ? 'text-blue-600 hover:bg-gray-100 focus:bg-gray-100' : 'text-gray-400 cursor-not-allowed pointer-events-none'}`}
+                                                                        >
+                                                                            Print Payslip
+                                                                        </a>
+                                                                    </div>
+                                                                </Dropdown.Content>
                                                         </Dropdown>
                                                     </td>
                                                 </tr>
@@ -219,24 +218,23 @@ export default function Payroll({ users = [], currentMonthPayrolls = {}, current
                                                         </button>
                                                     </Dropdown.Trigger>
                                                     <Dropdown.Content align="left" width="full">
-                                                        {!payroll ? (
+                                                        <div className="py-1">
                                                             <button 
                                                                 onClick={() => payEmployee(user.id, user.base_salary)}
-                                                                disabled={processing}
-                                                                className="block w-full px-4 py-3 text-start text-sm leading-5 text-green-600 font-medium hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition duration-150 ease-in-out"
+                                                                disabled={!!payroll || processing}
+                                                                className={`block w-full px-4 py-3 text-start text-sm leading-5 font-medium transition duration-150 ease-in-out ${!payroll ? 'text-green-600 hover:bg-gray-100 focus:bg-gray-100' : 'text-gray-400 cursor-not-allowed'}`}
                                                             >
-                                                                Mark as Paid
+                                                                {payroll ? 'Payment Completed' : 'Pay Employee'}
                                                             </button>
-                                                        ) : (
                                                             <a 
-                                                                href={route('payroll.slip', payroll.id)} 
-                                                                target="_blank" 
+                                                                href={payroll ? route('payroll.slip', payroll.id) : '#'} 
+                                                                target={payroll ? "_blank" : "_self"}
                                                                 rel="noopener noreferrer"
-                                                                className="block w-full px-4 py-3 text-start text-sm leading-5 text-blue-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition duration-150 ease-in-out"
+                                                                className={`block w-full px-4 py-3 text-start text-sm leading-5 font-medium transition duration-150 ease-in-out ${payroll ? 'text-blue-600 hover:bg-gray-100 focus:bg-gray-100' : 'text-gray-400 cursor-not-allowed pointer-events-none'}`}
                                                             >
                                                                 Print Payslip
                                                             </a>
-                                                        )}
+                                                        </div>
                                                     </Dropdown.Content>
                                                 </Dropdown>
                                             </div>

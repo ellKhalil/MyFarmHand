@@ -30,9 +30,7 @@ export default function AuthenticatedLayout({ header, children }) {
             <aside className="w-64 bg-green-900 text-white flex-shrink-0 hidden md:flex flex-col">
                 <div className="h-16 flex items-center justify-center border-b border-green-800">
                     <Link href="/" className="flex items-center gap-2 group">
-                        <svg className="h-8 w-8 text-green-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                        </svg>
+                        <img src="/logo.png" alt="MyFarmHand Logo" className="h-10 w-auto" />
                         <span className="text-xl font-extrabold tracking-tight">
                             MyFarmHand
                         </span>
@@ -72,8 +70,8 @@ export default function AuthenticatedLayout({ header, children }) {
                             </Link>
                         </li>
                         <li>
-                            <Link href={route('users.index')} className={`flex items-center w-full px-4 py-2 mt-2 rounded-sm transition-colors duration-200 ${route().current('users.index') ? 'bg-green-100 text-green-900 font-bold border-l-4 border-green-600' : 'text-gray-700 hover:bg-green-50 hover:text-green-800'}`}>
-                                <svg className="w-5 h-5 mr-3 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            <Link href={route('users.index')} className={`flex items-center gap-3 px-4 py-3 rounded-md transition ${route().current('users.index') ? 'bg-green-800 text-white font-medium' : 'hover:bg-green-800 text-green-100'}`}>
+                                <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                 Team & Users
                             </Link>
                         </li>
@@ -84,8 +82,8 @@ export default function AuthenticatedLayout({ header, children }) {
                         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Configuration</h3>
                         <ul className="space-y-1">
                             <li>
-                                <Link href={route('settings.index')} className={`flex items-center w-full px-4 py-2 mt-2 rounded-sm transition-colors duration-200 ${route().current('settings.index') ? 'bg-gray-100 text-gray-900 font-bold border-l-4 border-gray-600' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-800'}`}>
-                                    <svg className="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                <Link href={route('settings.index')} className={`flex items-center gap-3 px-4 py-3 rounded-md transition ${route().current('settings.index') ? 'bg-green-800 text-white font-medium' : 'hover:bg-green-800 text-green-100'}`}>
+                                    <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                     Settings
                                 </Link>
                             </li>

@@ -11,14 +11,17 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $roleName = $user->role->role_name ?? null;
+        // Generate some mock metrics for a premium feel
+        $metrics = [
+            'total_revenue' => '₦4,250,000',
+            'active_employees' => 24,
+            'pending_tasks' => 5,
+            'inventory_alerts' => 2
+        ];
 
-        return match ($roleName) {
-            'Admin' => Inertia::render('Admin/Dashboard', ['user' => $user]),
-            'Managing Director' => Inertia::render('Director/Dashboard', ['user' => $user]),
-            'Store Keeper' => Inertia::render('Storekeeper/Dashboard', ['user' => $user]),
-            'Accountant' => Inertia::render('Accountant/Dashboard', ['user' => $user]),
-            default => Inertia::render('Dashboard'), // Fallback
-        };
+        return Inertia::render('Dashboard', [
+            'user' => $user,
+            'metrics' => $metrics
+        ]);
     }
 }
