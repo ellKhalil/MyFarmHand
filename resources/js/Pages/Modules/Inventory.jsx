@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm, router } from '@inertiajs/react';
+import { Head, useForm, router, usePage } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
@@ -8,6 +8,7 @@ import Dropdown from '@/Components/Dropdown';
 import { useState } from 'react';
 
 export default function Inventory({ inventory, filters = {} }) {
+    const userRole = usePage().props.auth.user?.role?.role_name;
     const [search, setSearch] = useState(filters.search || '');
 
     const handleSearch = (e) => {
@@ -107,7 +108,9 @@ export default function Inventory({ inventory, filters = {} }) {
                                         </th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        {userRole !== 'Managing Director' && (
                                         <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                        )}
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
@@ -127,6 +130,7 @@ export default function Inventory({ inventory, filters = {} }) {
                                                         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Healthy</span>
                                                     )}
                                                 </td>
+                                                {userRole !== 'Managing Director' && (
                                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                     <Dropdown>
                                                         <Dropdown.Trigger>
@@ -144,6 +148,7 @@ export default function Inventory({ inventory, filters = {} }) {
                                                         </Dropdown.Content>
                                                     </Dropdown>
                                                 </td>
+                                                )}
                                             </tr>
                                         ))
                                     )}
@@ -175,6 +180,7 @@ export default function Inventory({ inventory, filters = {} }) {
                                             <span className="text-gray-500 block">Quantity:</span>
                                             <span className="font-bold text-gray-900">{item.quantity} {item.unit}</span>
                                         </div>
+                                        {userRole !== 'Managing Director' && (
                                         <div className="pt-2 border-t border-gray-100">
                                             <Dropdown>
                                                 <Dropdown.Trigger>
@@ -192,6 +198,7 @@ export default function Inventory({ inventory, filters = {} }) {
                                                 </Dropdown.Content>
                                             </Dropdown>
                                         </div>
+                                        )}
                                     </div>
                                 ))
                             )}
@@ -200,6 +207,7 @@ export default function Inventory({ inventory, filters = {} }) {
                     </div>
 
                     {/* Add New Item Form */}
+                    {userRole !== 'Managing Director' && (
                     <div className="bg-white p-6 shadow-sm border border-gray-200 rounded-sm">
                         <h3 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Register New Inventory Item</h3>
                         <form onSubmit={submit} className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -240,6 +248,7 @@ export default function Inventory({ inventory, filters = {} }) {
                             </div>
                         </form>
                     </div>
+                    )}
 
                 </div>
             </div>

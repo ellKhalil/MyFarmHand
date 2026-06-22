@@ -1,7 +1,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 
 export default function Dashboard({ user, metrics }) {
+    const userRole = usePage().props.auth.user?.role?.role_name;
+
     return (
         <AuthenticatedLayout
             header={
@@ -113,29 +115,39 @@ export default function Dashboard({ user, metrics }) {
                     </div>
 
                     {/* Quick Actions & Recent Activity */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                    <div className={userRole !== 'Managing Director' ? "grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8" : "mt-8"}>
                         {/* Quick Actions */}
+                        {userRole !== 'Managing Director' && (
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                             <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
                             <div className="grid grid-cols-2 gap-4">
+                                {['Admin'].includes(userRole) && (
                                 <a href={route('users.index')} className="flex items-center justify-center py-4 px-4 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-green-300 transition-colors">
                                     <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
                                     Onboard Employee
                                 </a>
+                                )}
+                                {['Admin', 'Accountant'].includes(userRole) && (
                                 <a href={route('payroll.index')} className="flex items-center justify-center py-4 px-4 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-green-300 transition-colors">
                                     <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                                     Run Payroll
                                 </a>
+                                )}
+                                {['Admin', 'Store Keeper'].includes(userRole) && (
                                 <a href={route('inventory.index')} className="flex items-center justify-center py-4 px-4 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-green-300 transition-colors">
                                     <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                                     Log Inventory
                                 </a>
+                                )}
+                                {['Admin', 'Accountant'].includes(userRole) && (
                                 <a href={route('finance.index')} className="flex items-center justify-center py-4 px-4 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-green-300 transition-colors">
                                     <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                     Record Transaction
                                 </a>
+                                )}
                             </div>
                         </div>
+                        )}
 
                         {/* Status / Notice Board */}
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">

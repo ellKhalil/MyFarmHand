@@ -1,11 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm, router } from '@inertiajs/react';
+import { Head, useForm, router, usePage } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import { useState } from 'react';
 
 export default function Settings({ departments = [] }) {
+    const userRole = usePage().props.auth.user?.role?.role_name;
     const { data, setData, post, processing, reset, errors } = useForm({
         name: '',
         base_salary: ''
@@ -55,8 +56,9 @@ export default function Settings({ departments = [] }) {
                             Add or remove departments, and set their fixed Base Salary. Updating a department's salary will automatically synchronize the salaries of all employees within that department.
                         </p>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className={userRole !== 'Managing Director' ? "grid grid-cols-1 md:grid-cols-2 gap-8" : "max-w-3xl mx-auto"}>
                             {/* Add Department Form */}
+                            {userRole !== 'Managing Director' && (
                             <div>
                                 <h4 className="font-semibold text-gray-700 mb-3">Add New Department</h4>
                                 <form onSubmit={submit} className="space-y-4">
@@ -89,6 +91,7 @@ export default function Settings({ departments = [] }) {
                                     </div>
                                 </form>
                             </div>
+                            )}
 
                             {/* Departments List */}
                             <div>
@@ -107,6 +110,7 @@ export default function Settings({ departments = [] }) {
                                                                 Salary: ₦{parseFloat(dept.base_salary || 0).toLocaleString()}
                                                             </div>
                                                         </div>
+                                                        {userRole !== 'Managing Director' && (
                                                         <div className="flex space-x-3">
                                                             <button 
                                                                 onClick={() => {
@@ -124,6 +128,7 @@ export default function Settings({ departments = [] }) {
                                                                 Remove
                                                             </button>
                                                         </div>
+                                                        )}
                                                     </div>
                                                     
                                                     {editingDept === dept.id && (

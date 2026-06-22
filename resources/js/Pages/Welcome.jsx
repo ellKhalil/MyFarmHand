@@ -1,4 +1,32 @@
 import { Head, Link } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
+
+const AnimatedSentence = ({ text, delayOffset = 0, letterDelay = 0.03, className = "" }) => {
+    return (
+        <span className={`flex flex-wrap ${className}`}>
+            {text.split(' ').map((word, wordIndex, wordsArray) => {
+                const prevLetters = wordsArray.slice(0, wordIndex).join('').length;
+                return (
+                    <span key={wordIndex} className="inline-block mr-[0.3em]">
+                        {word.split('').map((char, charIndex) => (
+                            <span 
+                                key={charIndex} 
+                                className="inline-block animate-fade-in-up" 
+                                style={{ 
+                                    animationDelay: `${(prevLetters + charIndex) * letterDelay + delayOffset}s`, 
+                                    opacity: 0, 
+                                    animationFillMode: 'forwards' 
+                                }}
+                            >
+                                {char}
+                            </span>
+                        ))}
+                    </span>
+                );
+            })}
+        </span>
+    );
+};
 
 export default function Welcome({ auth }) {
     return (
@@ -61,15 +89,20 @@ export default function Welcome({ auth }) {
                                 <path className="text-green-800 text-opacity-40" fill="currentColor" d="M-82.673 72l1761.849 472.086-134.327 501.315-1761.85-472.086z" />
                                 <path className="text-green-700 text-opacity-40" fill="currentColor" d="M-217.088 544.086L1544.761 72l134.327 501.316-1761.849 472.086z" />
                             </svg>
+                            {/* Removed Multiplayer Cursors as requested */}
                         </div>
                         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-40">
                             <div className="md:w-2/3">
                                 <span className="text-green-300 font-semibold tracking-wider uppercase text-sm mb-4 block">Enterprise Resource Planning</span>
                                 <h1 className="text-5xl tracking-tight font-extrabold text-white sm:text-6xl md:text-7xl mb-6">
-                                    Intelligent Operations for Modern Agriculture
+                                    <AnimatedSentence text="Intelligent Operations for Modern Agriculture" letterDelay={0.03} />
                                 </h1>
                                 <p className="text-xl text-green-100 max-w-2xl mb-10 leading-relaxed">
-                                    MyFarmHand centralizes inventory management, tracks production yields, automates payroll, and delivers real-time financial analytics—empowering stakeholders to make data-driven decisions.
+                                    <AnimatedSentence 
+                                        text="MyFarmHand centralizes inventory management, tracks production yields, automates payroll, and delivers real-time financial analytics—empowering stakeholders to make data-driven decisions." 
+                                        delayOffset={1.2} 
+                                        letterDelay={0.015} 
+                                    />
                                 </p>
                                 <div className="flex flex-col sm:flex-row gap-4">
                                     <Link
@@ -110,6 +143,26 @@ export default function Welcome({ auth }) {
                                     <div className="mt-2 text-sm font-medium text-gray-500 uppercase tracking-wide">Access Control</div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Marquee Banner */}
+                    <div className="bg-green-800 py-3 overflow-hidden border-b border-green-700 flex w-full">
+                        <div className="whitespace-nowrap animate-marquee flex space-x-16 items-center flex-shrink-0">
+                            {[...Array(3)].map((_, i) => (
+                                <div key={i} className="flex space-x-16 items-center text-green-200 text-sm font-bold tracking-widest uppercase pr-16">
+                                    <span>Real-Time Inventory</span>
+                                    <span>•</span>
+                                    <span>Automated Payroll Processing</span>
+                                    <span>•</span>
+                                    <span>Strict Role-Based Access Control</span>
+                                    <span>•</span>
+                                    <span>Financial Ledger Synchronization</span>
+                                    <span>•</span>
+                                    <span>Multi-Tier Dashboards</span>
+                                    <span>•</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
@@ -238,13 +291,149 @@ export default function Welcome({ auth }) {
                                         </li>
                                     </ul>
                                 </div>
-                                <div className="mt-10 md:mt-0 md:w-1/2">
-                                    <div className="bg-gray-100 p-2 sm:p-4 rounded-lg border border-gray-200 shadow-inner">
-                                        <img 
-                                            src="/rbac_ui.png" 
-                                            alt="RBAC Dashboard Interface" 
-                                            className="w-full h-auto rounded-md shadow-md border border-gray-300 object-cover"
-                                        />
+                                <div className="mt-10 md:mt-0 md:w-1/2 flex justify-center">
+                                    <img 
+                                        src="/rbac_mockup.png?v=1.1" 
+                                        alt="MyFarmHand Multi-Device Access" 
+                                        className="w-full max-w-lg h-auto object-contain animate-float"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* How It Works Section */}
+                    <div className="py-20 bg-gray-50 border-t border-gray-200">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="text-center mb-16">
+                                <h2 className="text-base text-green-600 font-semibold tracking-wide uppercase">Onboarding Process</h2>
+                                <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                                    3 Steps to Total Operational Control
+                                </p>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative">
+                                {/* Connecting line for desktop */}
+                                <div className="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-green-200 z-0"></div>
+                                
+                                <div className="relative z-10 text-center">
+                                    <div className="w-24 h-24 mx-auto bg-white border-4 border-green-500 rounded-full flex items-center justify-center text-3xl font-bold text-green-700 shadow-md mb-6">
+                                        1
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-900 mb-2">Configure Roles & Teams</h3>
+                                    <p className="text-gray-600">Set up your organizational structure. Assign strict access controls to Admins, Accountants, and Storekeepers.</p>
+                                </div>
+                                <div className="relative z-10 text-center">
+                                    <div className="w-24 h-24 mx-auto bg-white border-4 border-green-500 rounded-full flex items-center justify-center text-3xl font-bold text-green-700 shadow-md mb-6">
+                                        2
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-900 mb-2">Log Initial Inventory</h3>
+                                    <p className="text-gray-600">Populate your farm's biological and physical assets. Set low-stock alerts and map out your supply chain.</p>
+                                </div>
+                                <div className="relative z-10 text-center">
+                                    <div className="w-24 h-24 mx-auto bg-white border-4 border-green-500 rounded-full flex items-center justify-center text-3xl font-bold text-green-700 shadow-md mb-6">
+                                        3
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-900 mb-2">Automate Operations</h3>
+                                    <p className="text-gray-600">Start operations. Watch as inventory purchases and automated payroll sync directly into your Financial Ledger in real-time.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Security & Compliance Banner */}
+                    <div className="bg-gray-900 text-white py-16">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                                <div>
+                                    <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl mb-4">
+                                        Enterprise-Grade Security
+                                    </h2>
+                                    <p className="text-gray-400 text-lg mb-6">
+                                        Your farm's financial data and workforce records are your most valuable assets. MyFarmHand employs industry-leading encryption and architectural sandboxing to guarantee data integrity.
+                                    </p>
+                                    <ul className="space-y-4">
+                                        <li className="flex items-center">
+                                            <svg className="h-6 w-6 text-green-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                            </svg>
+                                            <span className="text-gray-300 font-medium">End-to-End Database Encryption</span>
+                                        </li>
+                                        <li className="flex items-center">
+                                            <svg className="h-6 w-6 text-green-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                            </svg>
+                                            <span className="text-gray-300 font-medium">Daily Automated Offshore Backups</span>
+                                        </li>
+                                        <li className="flex items-center">
+                                            <svg className="h-6 w-6 text-green-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                            </svg>
+                                            <span className="text-gray-300 font-medium">Strict Route-Level Middleware Protection</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div className="bg-gray-800 p-8 rounded-lg border border-gray-700 shadow-2xl relative">
+                                    <div className="absolute top-0 right-0 -mt-4 -mr-4 bg-green-500 text-white font-bold px-4 py-1 rounded-full shadow-lg transform rotate-3">Protected</div>
+                                    <pre className="text-sm text-green-400 font-mono overflow-x-auto">
+                                        <code>
+{`// Security Middleware Handlers
+Route::middleware(['auth', 'role:Admin'])->group(function () {
+    Route::get('/settings', [Settings::class, 'index']);
+    Route::post('/users/manage', [User::class, 'store']);
+});
+
+// Financial Ledger Validation
+$ledger->verifyIntegrity();
+Log::info('Zero-knowledge proof validated.');`}
+                                        </code>
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Testimonials Section */}
+                    <div className="py-20 bg-white">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <h2 className="text-center text-3xl font-extrabold text-gray-900 sm:text-4xl mb-16">Trusted by Forward-Thinking Farms</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                <div className="bg-gray-50 p-8 rounded-lg border border-gray-200">
+                                    <div className="flex text-yellow-400 mb-4">
+                                        ★★★★★
+                                    </div>
+                                    <p className="text-gray-700 italic mb-6">"Since migrating to MyFarmHand, we've entirely eliminated double-entry accounting. Payroll now takes 15 minutes instead of 3 days."</p>
+                                    <div className="flex items-center">
+                                        <div className="w-12 h-12 bg-green-200 rounded-full flex items-center justify-center text-green-800 font-bold text-lg">AJ</div>
+                                        <div className="ml-4">
+                                            <p className="text-gray-900 font-bold">Adebayo Johnson</p>
+                                            <p className="text-gray-500 text-sm">Director, Green Valley Coop</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="bg-gray-50 p-8 rounded-lg border border-gray-200">
+                                    <div className="flex text-yellow-400 mb-4">
+                                        ★★★★★
+                                    </div>
+                                    <p className="text-gray-700 italic mb-6">"The role-based access control is a game changer. I can confidently let storekeepers log stock without exposing our financial ledgers."</p>
+                                    <div className="flex items-center">
+                                        <div className="w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center text-blue-800 font-bold text-lg">SO</div>
+                                        <div className="ml-4">
+                                            <p className="text-gray-900 font-bold">Sarah O'Connor</p>
+                                            <p className="text-gray-500 text-sm">Farm Manager, Oakwood Farms</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="bg-gray-50 p-8 rounded-lg border border-gray-200">
+                                    <div className="flex text-yellow-400 mb-4">
+                                        ★★★★★
+                                    </div>
+                                    <p className="text-gray-700 italic mb-6">"Having our inventory directly linked to the Profit & Loss ledger means we are always audit-ready. Simply phenomenal software."</p>
+                                    <div className="flex items-center">
+                                        <div className="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center text-purple-800 font-bold text-lg">ME</div>
+                                        <div className="ml-4">
+                                            <p className="text-gray-900 font-bold">Michael Eze</p>
+                                            <p className="text-gray-500 text-sm">Head Accountant, AgriScale</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

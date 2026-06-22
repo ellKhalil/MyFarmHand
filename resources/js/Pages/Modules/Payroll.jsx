@@ -1,11 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import Pagination from '@/Components/Pagination';
 import Dropdown from '@/Components/Dropdown';
 import { useState } from 'react';
 
 export default function Payroll({ users = [], currentMonthPayrolls = {}, currentMonth, filters = {} }) {
+    const userRole = usePage().props.auth.user?.role?.role_name;
     const [processing, setProcessing] = useState(false);
     const [search, setSearch] = useState(filters.search || '');
 
@@ -152,14 +153,16 @@ export default function Payroll({ users = [], currentMonthPayrolls = {}, current
                                                                 </button>
                                                             </Dropdown.Trigger>
                                                                 <Dropdown.Content align="left" width="48">
-                                                                    <div className="py-1">
-                                                                        <button 
-                                                                            onClick={() => payEmployee(user.id, user.base_salary)}
-                                                                            disabled={!!payroll || processing}
-                                                                            className={`block w-full px-4 py-2 text-start text-sm leading-5 font-medium transition duration-150 ease-in-out ${!payroll ? 'text-green-600 hover:bg-gray-100 focus:bg-gray-100' : 'text-gray-400 cursor-not-allowed'}`}
-                                                                        >
-                                                                            {payroll ? 'Payment Completed' : 'Pay Employee'}
-                                                                        </button>
+                                                                        <div className="py-1">
+                                                                            {userRole !== 'Managing Director' && (
+                                                                            <button 
+                                                                                onClick={() => payEmployee(user.id, user.base_salary)}
+                                                                                disabled={!!payroll || processing}
+                                                                                className={`block w-full px-4 py-2 text-start text-sm leading-5 font-medium transition duration-150 ease-in-out ${!payroll ? 'text-green-600 hover:bg-gray-100 focus:bg-gray-100' : 'text-gray-400 cursor-not-allowed'}`}
+                                                                            >
+                                                                                {payroll ? 'Payment Completed' : 'Pay Employee'}
+                                                                            </button>
+                                                                            )}
                                                                         <a 
                                                                             href={payroll ? route('payroll.slip', payroll.id) : '#'} 
                                                                             target={payroll ? "_blank" : "_self"}
@@ -219,6 +222,7 @@ export default function Payroll({ users = [], currentMonthPayrolls = {}, current
                                                     </Dropdown.Trigger>
                                                     <Dropdown.Content align="left" width="full">
                                                         <div className="py-1">
+                                                            {userRole !== 'Managing Director' && (
                                                             <button 
                                                                 onClick={() => payEmployee(user.id, user.base_salary)}
                                                                 disabled={!!payroll || processing}
@@ -226,6 +230,7 @@ export default function Payroll({ users = [], currentMonthPayrolls = {}, current
                                                             >
                                                                 {payroll ? 'Payment Completed' : 'Pay Employee'}
                                                             </button>
+                                                            )}
                                                             <a 
                                                                 href={payroll ? route('payroll.slip', payroll.id) : '#'} 
                                                                 target={payroll ? "_blank" : "_self"}

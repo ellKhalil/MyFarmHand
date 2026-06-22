@@ -29,10 +29,22 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+        $notifications = [];
+        $unreadCount = 0;
+
+        if ($user) {
+            $user->loadMissing('notifications');
+            $notifications = $user->notifications()->orderBy('created_at', 'desc')->take(10)->get();
+            $unreadCount = $user->notifications()->where('is_read', false)->count();
+        }
+
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $user,
+                'notifications' => $notifications,
+                'unreadNotificationsCount' => $unreadCount,
             ],
             'flash' => [
                 'success' => $request->session()->get('success'),

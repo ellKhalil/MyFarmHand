@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm, router } from '@inertiajs/react';
+import { Head, useForm, router, usePage } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
@@ -8,6 +8,7 @@ import Dropdown from '@/Components/Dropdown';
 import { useState } from 'react';
 
 export default function Finance({ transactions, filters = {} }) {
+    const userRole = usePage().props.auth.user?.role?.role_name;
     const [search, setSearch] = useState(filters.search || '');
 
     const handleSearch = (e) => {
@@ -169,6 +170,7 @@ export default function Finance({ transactions, filters = {} }) {
                     </div>
 
                     {/* Log Transaction */}
+                    {userRole !== 'Managing Director' && (
                     <div className="bg-white p-6 shadow-sm border border-gray-200 rounded-sm">
                         <h3 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Record Financial Transaction</h3>
                         <form onSubmit={submit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -200,6 +202,7 @@ export default function Finance({ transactions, filters = {} }) {
                             </div>
                         </form>
                     </div>
+                    )}
 
                 </div>
             </div>

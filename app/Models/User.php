@@ -34,6 +34,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

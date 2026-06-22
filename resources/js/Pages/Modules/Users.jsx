@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm, router } from '@inertiajs/react';
+import { Head, useForm, router, usePage } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import Pagination from '@/Components/Pagination';
 import TextInput from '@/Components/TextInput';
@@ -8,6 +8,7 @@ import Dropdown from '@/Components/Dropdown';
 import { useState } from 'react';
 
 export default function Users({ users, roles = [], departments = [], filters = {} }) {
+    const userRole = usePage().props.auth.user?.role?.role_name;
     const [search, setSearch] = useState(filters.search || '');
 
     const handleSearch = (e) => {
@@ -108,7 +109,9 @@ export default function Users({ users, roles = [], departments = [], filters = {
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-200" onClick={() => handleSort('base_salary')}>
                                             Base Salary {filters.sort_field === 'base_salary' && (filters.sort_direction === 'asc' ? '↑' : '↓')}
                                         </th>
+                                        {userRole !== 'Managing Director' && (
                                         <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                        )}
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
@@ -141,6 +144,7 @@ export default function Users({ users, roles = [], departments = [], filters = {
                                                 <td className="px-6 py-4 whitespace-nowrap font-bold text-gray-900">
                                                     ₦{parseFloat(user.base_salary).toLocaleString()}
                                                 </td>
+                                                {userRole !== 'Managing Director' && (
                                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                     <Dropdown>
                                                         <Dropdown.Trigger>
@@ -161,6 +165,7 @@ export default function Users({ users, roles = [], departments = [], filters = {
                                                         </Dropdown.Content>
                                                     </Dropdown>
                                                 </td>
+                                                )}
                                             </tr>
                                         ))
                                     )}
@@ -200,6 +205,7 @@ export default function Users({ users, roles = [], departments = [], filters = {
                                             <span className="text-gray-500 text-sm">Salary:</span>
                                             <span className="font-bold text-gray-900">₦{parseFloat(user.base_salary).toLocaleString()}</span>
                                         </div>
+                                        {userRole !== 'Managing Director' && (
                                         <div className="pt-2 border-t border-gray-100">
                                             <Dropdown>
                                                 <Dropdown.Trigger>
@@ -220,6 +226,7 @@ export default function Users({ users, roles = [], departments = [], filters = {
                                                 </Dropdown.Content>
                                             </Dropdown>
                                         </div>
+                                        )}
                                     </div>
                                 ))
                             )}
@@ -228,6 +235,7 @@ export default function Users({ users, roles = [], departments = [], filters = {
                     </div>
 
                     {/* Onboard New Employee Form */}
+                    {userRole !== 'Managing Director' && (
                     <div className="bg-white p-6 shadow-sm border border-gray-200 rounded-sm">
                         <h3 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Onboard New Employee</h3>
                         <form onSubmit={submit} className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -274,6 +282,7 @@ export default function Users({ users, roles = [], departments = [], filters = {
                             </div>
                         </form>
                     </div>
+                    )}
 
                 </div>
             </div>
