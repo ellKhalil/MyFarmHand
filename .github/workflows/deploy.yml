@@ -24,7 +24,6 @@ jobs:
           node-version: '20'
 
       - name: Install Composer Dependencies
-        # --no-scripts stops package compilation on the runner so it doesn't crash on syntax differences
         run: composer install --no-dev --optimize-autoloader --no-plugins --no-scripts --ignore-platform-reqs
 
       - name: Install NPM Dependencies
@@ -42,3 +41,8 @@ jobs:
           local-dir: ./
           server-dir: ./ 
           dangerous-clean-slate: false
+          # Network & Firewall Bypass Flags:
+          protocol: ftp
+          port: 21
+          passive: true
+          timeout: 60000 # Extends connection wait time to 60 seconds
