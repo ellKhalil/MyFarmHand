@@ -31,7 +31,7 @@ jobs:
 
       - name: Build React Assets
         run: npm run build
-
+          
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -39,8 +39,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           local-dir: ./
-          # Change this to climb out of the restricted 'khalil_github' folder:
-          server-dir: ../ 
+          server-dir: ./ 
           dangerous-clean-slate: false
           protocol: ftp
           port: 21
