@@ -24,7 +24,7 @@ jobs:
           node-version: '20'
 
       - name: Install Composer Dependencies
-        run: composer install --no-dev --optimize-autoloader
+        run: composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
       - name: Install NPM Dependencies
         run: npm install
