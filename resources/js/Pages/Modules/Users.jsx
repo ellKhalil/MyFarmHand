@@ -44,11 +44,11 @@ export default function Users({ users, roles = [], departments = [], filters = {
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Team & Users
+                    Staff
                 </h2>
             }
         >
-            <Head title="Team & Users" />
+            <Head title="Staff" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8">
@@ -116,7 +116,7 @@ export default function Users({ users, roles = [], departments = [], filters = {
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {!users.data || users.data.length === 0 ? (
-                                        <tr><td colSpan="5" className="px-6 py-4 text-center text-gray-500">No users found.</td></tr>
+                                        <tr><td colSpan="5" className="px-6 py-4 text-center text-gray-500">No staff found.</td></tr>
                                     ) : (
                                         users.data.map((user) => (
                                             <tr key={user.id}>
@@ -176,7 +176,7 @@ export default function Users({ users, roles = [], departments = [], filters = {
                         {/* Mobile Cards */}
                         <div className="md:hidden divide-y divide-gray-200">
                             {!users.data || users.data.length === 0 ? (
-                                <div className="p-6 text-center text-gray-500">No users found.</div>
+                                <div className="p-6 text-center text-gray-500">No staff found.</div>
                             ) : (
                                 users.data.map((user) => (
                                     <div key={user.id} className="p-4 space-y-3 bg-white">

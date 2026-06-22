@@ -4,6 +4,12 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\InventoryItemController;
+use App\Http\Controllers\FinancialTransactionController;
+use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\SettingsController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -25,31 +31,31 @@ Route::middleware('auth')->group(function () {
 
     // Inventory - Admins, Directors, Store Keepers
     Route::middleware('role:Admin,Managing Director,Store Keeper')->group(function() {
-        Route::get('/inventory', [\App\Http\Controllers\InventoryItemController::class, 'index'])->name('inventory.index');
-        Route::post('/inventory/items', [\App\Http\Controllers\InventoryItemController::class, 'store'])->name('inventory.store');
-        Route::post('/inventory/items/{item}/transaction', [\App\Http\Controllers\InventoryItemController::class, 'logTransaction'])->name('inventory.transaction');
+        Route::get('/inventory', [InventoryItemController::class, 'index'])->name('inventory.index');
+        Route::post('/inventory/items', [InventoryItemController::class, 'store'])->name('inventory.store');
+        Route::post('/inventory/items/{item}/transaction', [InventoryItemController::class, 'logTransaction'])->name('inventory.transaction');
     });
 
     // Finance & Payroll - Admins, Directors, Accountants
     Route::middleware('role:Admin,Managing Director,Accountant')->group(function() {
-        Route::get('/payroll', [\App\Http\Controllers\PayrollController::class, 'index'])->name('payroll.index');
-        Route::get('/payroll/export', [\App\Http\Controllers\PayrollController::class, 'export'])->name('payroll.export');
-        Route::get('/payroll/{payroll}/slip', [\App\Http\Controllers\PayrollController::class, 'payslip'])->name('payroll.slip');
-        Route::post('/payroll/pay', [\App\Http\Controllers\PayrollController::class, 'pay'])->name('payroll.pay');
+        Route::get('/payroll', [PayrollController::class, 'index'])->name('payroll.index');
+        Route::get('/payroll/export', [PayrollController::class, 'export'])->name('payroll.export');
+        Route::get('/payroll/{payroll}/slip', [PayrollController::class, 'payslip'])->name('payroll.slip');
+        Route::post('/payroll/pay', [PayrollController::class, 'pay'])->name('payroll.pay');
 
-        Route::get('/finance', [\App\Http\Controllers\FinancialTransactionController::class, 'index'])->name('finance.index');
-        Route::post('/finance/transactions', [\App\Http\Controllers\FinancialTransactionController::class, 'store'])->name('finance.transaction.store');
+        Route::get('/finance', [FinancialTransactionController::class, 'index'])->name('finance.index');
+        Route::post('/finance/transactions', [FinancialTransactionController::class, 'store'])->name('finance.transaction.store');
     });
 
     // Team, Users & Settings - Admins, Directors
     Route::middleware('role:Admin,Managing Director')->group(function() {
-        Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
-        Route::post('/users', [\App\Http\Controllers\UserController::class, 'store'])->name('users.store');
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
-        Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
-        Route::post('/settings/departments', [\App\Http\Controllers\SettingsController::class, 'storeDepartment'])->name('settings.departments.store');
-        Route::put('/settings/departments/{department}', [\App\Http\Controllers\SettingsController::class, 'updateDepartment'])->name('settings.departments.update');
-        Route::delete('/settings/departments/{department}', [\App\Http\Controllers\SettingsController::class, 'destroyDepartment'])->name('settings.departments.destroy');
+        Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+        Route::post('/settings/departments', [SettingsController::class, 'storeDepartment'])->name('settings.departments.store');
+        Route::put('/settings/departments/{department}', [SettingsController::class, 'updateDepartment'])->name('settings.departments.update');
+        Route::delete('/settings/departments/{department}', [SettingsController::class, 'destroyDepartment'])->name('settings.departments.destroy');
     });
 
     // Production (Globally Accessible for Task Logging, but can be restricted inside controller)

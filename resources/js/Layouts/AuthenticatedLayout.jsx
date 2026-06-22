@@ -49,7 +49,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 </nav>
 
                 <div className="p-4 border-t border-green-800 text-sm text-green-300">
-                    &copy; MyFarmHand v1.0
+                    &copy; MyFarmHand v2.0
                 </div>
             </aside>
 

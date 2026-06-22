@@ -1,8 +1,26 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage } from '@inertiajs/react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-export default function Dashboard({ user, metrics }) {
+export default function Dashboard({ user, metrics, chartData }) {
     const userRole = usePage().props.auth.user?.role?.role_name;
+
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="bg-white p-4 border border-gray-100 shadow-xl rounded-lg">
+                    <p className="font-bold text-gray-800 mb-2">{label}</p>
+                    <p className="text-green-600 font-semibold text-sm">
+                        Revenue: ₦{payload[0].value.toLocaleString()}
+                    </p>
+                    <p className="text-red-500 font-semibold text-sm mt-1">
+                        Expenses: ₦{payload[1].value.toLocaleString()}
+                    </p>
+                </div>
+            );
+        }
+        return null;
+    };
 
     return (
         <AuthenticatedLayout
@@ -113,6 +131,41 @@ export default function Dashboard({ user, metrics }) {
                             </div>
                         </div>
                     </div>
+
+                    {/* Financial Performance Chart */}
+                    {chartData && (
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8 mt-8 hover:shadow-md transition-shadow duration-300">
+                            <div className="mb-6">
+                                <h3 className="text-lg font-bold text-gray-900">Financial Performance Overview</h3>
+                                <p className="text-sm text-gray-500">6-Month Revenue vs. Expenses trajectory</p>
+                            </div>
+                            <div className="h-80 w-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart
+                                        data={chartData}
+                                        margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                                    >
+                                        <defs>
+                                            <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#10B981" stopOpacity={0.3}/>
+                                                <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                                            </linearGradient>
+                                            <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#EF4444" stopOpacity={0.3}/>
+                                                <stop offset="95%" stopColor="#EF4444" stopOpacity={0}/>
+                                            </linearGradient>
+                                        </defs>
+                                        <XAxis dataKey="month" stroke="#9CA3AF" tick={{ fill: '#6B7280', fontSize: 12 }} tickLine={false} axisLine={false} />
+                                        <YAxis stroke="#9CA3AF" tick={{ fill: '#6B7280', fontSize: 12 }} tickLine={false} axisLine={false} tickFormatter={(value) => `₦${(value / 1000).toFixed(0)}k`} />
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+                                        <Tooltip content={<CustomTooltip />} />
+                                        <Area type="monotone" dataKey="Income" stroke="#10B981" strokeWidth={3} fillOpacity={1} fill="url(#colorIncome)" />
+                                        <Area type="monotone" dataKey="Expenses" stroke="#EF4444" strokeWidth={3} fillOpacity={1} fill="url(#colorExpense)" />
+                                    </AreaChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Quick Actions & Recent Activity */}
                     <div className={userRole !== 'Managing Director' ? "grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8" : "mt-8"}>

@@ -20,6 +20,7 @@ export default {
                 'float': 'float 6s ease-in-out infinite',
                 'cursor': 'cursorMove 8s ease-in-out infinite alternate',
                 'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                'blob': 'blob 15s infinite',
             },
             keyframes: {
                 fadeInUp: {
@@ -40,6 +41,12 @@ export default {
                     '50%': { transform: 'translate(60px, -10px)' },
                     '75%': { transform: 'translate(-20px, -30px)' },
                     '100%': { transform: 'translate(0, 0)' },
+                },
+                blob: {
+                    '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                    '33%': { transform: 'translate(40px, -60px) scale(1.1)' },
+                    '66%': { transform: 'translate(-30px, 30px) scale(0.9)' },
+                    '100%': { transform: 'translate(0px, 0px) scale(1)' },
                 }
             }
         },

@@ -27,7 +27,7 @@ export const AdminNavbar = () => (
             <NavItem href={route('payroll.index')} active={route().current('payroll.*')} icon={Icons.Payroll}>Payroll Management</NavItem>
             <NavItem href={route('finance.index')} active={route().current('finance.index')} icon={Icons.Finance}>Financial Ledger</NavItem>
             <NavItem href={route('tasks.index')} active={route().current('tasks.index')} icon={Icons.Tasks}>Tasks</NavItem>
-            <NavItem href={route('users.index')} active={route().current('users.index')} icon={Icons.Users}>Team & Users</NavItem>
+            <NavItem href={route('users.index')} active={route().current('users.index')} icon={Icons.Users}>Staff</NavItem>
         </ul>
         <div className="mt-8 px-4">
             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Configuration</h3>
@@ -42,16 +42,16 @@ export const DirectorNavbar = () => (
     <>
         <ul className="space-y-1 px-2">
             <NavItem href={route('dashboard')} active={route().current('dashboard')} icon={Icons.Dashboard}>Dashboard</NavItem>
-            <NavItem href={route('inventory.index')} active={route().current('inventory.index')} icon={Icons.Inventory}>Inventory Overview</NavItem>
-            <NavItem href={route('payroll.index')} active={route().current('payroll.*')} icon={Icons.Payroll}>Payroll Overview</NavItem>
-            <NavItem href={route('finance.index')} active={route().current('finance.index')} icon={Icons.Finance}>Financial Overview</NavItem>
-            <NavItem href={route('tasks.index')} active={route().current('tasks.index')} icon={Icons.Tasks}>Tasks Overview</NavItem>
-            <NavItem href={route('users.index')} active={route().current('users.index')} icon={Icons.Users}>Team Overview</NavItem>
+            <NavItem href={route('inventory.index')} active={route().current('inventory.index')} icon={Icons.Inventory}>Inventory</NavItem>
+            <NavItem href={route('payroll.index')} active={route().current('payroll.*')} icon={Icons.Payroll}>Payroll Management</NavItem>
+            <NavItem href={route('finance.index')} active={route().current('finance.index')} icon={Icons.Finance}>Financial Ledger</NavItem>
+            <NavItem href={route('tasks.index')} active={route().current('tasks.index')} icon={Icons.Tasks}>Tasks</NavItem>
+            <NavItem href={route('users.index')} active={route().current('users.index')} icon={Icons.Users}>Staff</NavItem>
         </ul>
         <div className="mt-8 px-4">
             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Configuration</h3>
             <ul className="space-y-1">
-                <NavItem href={route('settings.index')} active={route().current('settings.index')} icon={Icons.Settings}>System Settings</NavItem>
+                <NavItem href={route('settings.index')} active={route().current('settings.index')} icon={Icons.Settings}>Settings</NavItem>
             </ul>
         </div>
     </>
