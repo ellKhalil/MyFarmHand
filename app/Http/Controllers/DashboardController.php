@@ -29,8 +29,6 @@ class DashboardController extends Controller
             'inventory_alerts' => $inventoryAlerts
         ];
 
-        // Fetch recent activity (latest 5 tasks)
-        $recentActivity = Task::with('assignedUser')->latest()->take(5)->get();
         // Generate mock financial chart data for the last 6 months
         $chartData = [
             ['month' => 'Jan', 'Income' => 1200000, 'Expenses' => 800000],
@@ -44,8 +42,7 @@ class DashboardController extends Controller
         return Inertia::render('Dashboard', [
             'user' => $user,
             'metrics' => $metrics,
-            'chartData' => $chartData,
-            'recentActivity' => $recentActivity
+            'chartData' => $chartData
         ]);
     }
 }
