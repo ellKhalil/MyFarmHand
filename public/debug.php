@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 $logFile = __DIR__ . '/../storage/logs/laravel.log';
 
@@ -25,16 +28,16 @@ echo "<br><strong>Cache cleared successfully!</strong><br><hr>";
 echo "<h2>Running Database Migrations...</h2>";
 require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-$response = $kernel->handle(
-    $request = Illuminate\Http\Request::capture()
-);
+
 try {
+    $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+    $kernel->bootstrap();
+    
     \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
     echo "<pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
     echo "<strong>Migrations ran successfully!</strong><br><hr>";
-} catch (\Exception $e) {
-    echo "<strong>Migration Error: </strong>" . $e->getMessage() . "<br><hr>";
+} catch (\Throwable $e) {
+    echo "<strong>Fatal/Migration Error: </strong>" . $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine() . "<br><hr>";
 }
 
 echo "<h2>Latest Laravel Error Logs</h2>";
