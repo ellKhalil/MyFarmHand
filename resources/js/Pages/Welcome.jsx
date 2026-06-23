@@ -34,26 +34,27 @@ export default function Welcome({ auth }) {
             <Head title="Enterprise Management | MyFarmHand" />
             <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-green-700 selection:text-white">
                 
-                {/* Floating Glassmorphism Navigation */}
+                {/* Floating Glassmorphism Navigation (Dark Mode) */}
                 <div className="fixed top-0 inset-x-0 z-50 pt-6 px-4 sm:px-6 lg:px-8 pointer-events-none">
-                    <header className="mx-auto max-w-5xl bg-white/70 backdrop-blur-md border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.06)] rounded-full pointer-events-auto transition-all duration-300">
+                    <header className="mx-auto max-w-5xl bg-black/20 backdrop-blur-md border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.1)] rounded-full pointer-events-auto transition-all duration-300">
                         <div className="flex justify-between h-16 items-center px-6">
                             <div className="flex-shrink-0 flex items-center">
                                 {/* Text Logo */}
-                                <span className="text-green-900 text-2xl font-extrabold tracking-tight flex items-center gap-2">
+                                <Link href="/" className="text-white text-2xl font-extrabold tracking-tight flex items-center gap-2">
                                     <img src="/logo.png" alt="MyFarmHand" className="w-8 h-8 object-contain" />
                                     MyFarmHand
-                                </span>
+                                </Link>
                             </div>
                             <nav className="hidden md:flex space-x-2">
-                                <a href="#capabilities" className="text-gray-600 hover:text-green-900 hover:bg-green-50/50 font-semibold px-4 py-2 rounded-full text-sm transition-all duration-200">Capabilities</a>
-                                <a href="#roles" className="text-gray-600 hover:text-green-900 hover:bg-green-50/50 font-semibold px-4 py-2 rounded-full text-sm transition-all duration-200">Access Management</a>
+                                <Link href="/about" className="text-gray-300 hover:text-white hover:bg-white/10 font-semibold px-4 py-2 rounded-full text-sm transition-all duration-200">About Us</Link>
+                                <a href="/#capabilities" className="text-gray-300 hover:text-white hover:bg-white/10 font-semibold px-4 py-2 rounded-full text-sm transition-all duration-200">Capabilities</a>
+                                <Link href="/contact" className="text-gray-300 hover:text-white hover:bg-white/10 font-semibold px-4 py-2 rounded-full text-sm transition-all duration-200">Contact Us</Link>
                             </nav>
                             <div className="flex items-center space-x-3">
-                                {auth.user ? (
+                                {auth?.user ? (
                                     <Link
                                         href={route('dashboard')}
-                                        className="bg-green-800 text-white font-bold hover:bg-green-900 px-5 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+                                        className="bg-green-600 text-white font-bold hover:bg-green-500 px-5 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
                                     >
                                         Dashboard
                                     </Link>
@@ -61,13 +62,13 @@ export default function Welcome({ auth }) {
                                     <>
                                         <Link
                                             href={route('login')}
-                                            className="text-gray-700 font-semibold hover:bg-gray-100 px-4 py-2 rounded-full transition-all duration-200"
+                                            className="text-gray-200 font-semibold hover:bg-white/10 px-4 py-2 rounded-full transition-all duration-200"
                                         >
                                             Log In
                                         </Link>
                                         <Link
                                             href={route('register')}
-                                            className="bg-green-800 text-white font-bold hover:bg-green-900 px-5 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+                                            className="bg-green-600 text-white font-bold hover:bg-green-500 px-5 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
                                         >
                                             Get Started
                                         </Link>
@@ -83,9 +84,9 @@ export default function Welcome({ auth }) {
                     <div className="relative bg-[#022c22] overflow-hidden">
                         <div className="absolute inset-0">
                             {/* Animated Glowing Blobs */}
-                            <div className="absolute top-0 -left-4 w-96 h-96 bg-green-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob"></div>
-                            <div className="absolute top-0 -right-4 w-96 h-96 bg-emerald-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob animation-delay-2000"></div>
-                            <div className="absolute -bottom-32 left-1/2 w-96 h-96 bg-teal-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob animation-delay-4000"></div>
+                            <div className="absolute top-0 -left-4 w-96 h-96 bg-green-500 rounded-full mix-blend-screen filter blur-[128px] opacity-40 animate-blob"></div>
+                            <div className="absolute top-0 -right-4 w-96 h-96 bg-emerald-400 rounded-full mix-blend-screen filter blur-[128px] opacity-40 animate-blob animation-delay-2000"></div>
+                            <div className="absolute -bottom-32 left-1/2 w-96 h-96 bg-teal-500 rounded-full mix-blend-screen filter blur-[128px] opacity-40 animate-blob animation-delay-4000"></div>
                             
                             {/* Abstract Pattern overlay */}
                             <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="xMidYMid slice" fill="none" viewBox="0 0 1463 360">
@@ -514,7 +515,7 @@ Log::info('Zero-knowledge proof validated.');`}
                         </div>
                         <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
                             <p className="text-sm text-gray-500">
-                                &copy; {new Date().getFullYear()} MyFarmHand Enterprise Management. All rights reserved.
+                                &copy; {new Date().getFullYear()} MyFarmHand Enterprise Management. Designed by Nasir'sss Computech. All rights reserved.
                             </p>
                             <div className="flex space-x-6">
                                 <a href="#" className="text-gray-500 hover:text-white transition">

@@ -32,7 +32,7 @@ export default function AuthenticatedLayout({ header, children }) {
             <aside className="w-64 bg-green-900 text-white flex-shrink-0 hidden md:flex flex-col">
                 <div className="h-16 flex items-center justify-center border-b border-green-800">
                     <Link href="/" className="flex items-center gap-2 group">
-                        <img src="/logo.png" alt="MyFarmHand Logo" className="h-10 w-auto" />
+                        <img src="/logo.png" alt="MyFarmHand Logo" className="h-10 w-auto object-contain" />
                         <span className="text-xl font-extrabold tracking-tight">
                             MyFarmHand
                         </span>
@@ -48,8 +48,9 @@ export default function AuthenticatedLayout({ header, children }) {
                     {!userRole && <GeneralStaffNavbar />}
                 </nav>
 
-                <div className="p-4 border-t border-green-800 text-sm text-green-300">
-                    &copy; MyFarmHand v2.0
+                <div className="p-4 border-t border-green-800 text-xs text-green-300">
+                    &copy; MyFarmHand v2.0 <br/>
+                    <span className="text-green-500">Designed by Nasir'sss Computech</span>
                 </div>
             </aside>
 
