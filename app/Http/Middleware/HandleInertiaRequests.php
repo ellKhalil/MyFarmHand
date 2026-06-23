@@ -34,7 +34,7 @@ class HandleInertiaRequests extends Middleware
         $unreadCount = 0;
 
         if ($user) {
-            $user->loadMissing('notifications');
+            $user->loadMissing(['notifications', 'farm', 'role']);
             $notifications = $user->notifications()->orderBy('created_at', 'desc')->take(10)->get();
             $unreadCount = $user->notifications()->where('is_read', false)->count();
         }

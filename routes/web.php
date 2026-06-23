@@ -70,6 +70,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/settings/departments', [SettingsController::class, 'storeDepartment'])->name('settings.departments.store');
         Route::put('/settings/departments/{department}', [SettingsController::class, 'updateDepartment'])->name('settings.departments.update');
         Route::delete('/settings/departments/{department}', [SettingsController::class, 'destroyDepartment'])->name('settings.departments.destroy');
+        Route::post('/settings/logo', [SettingsController::class, 'uploadLogo'])->name('settings.logo.upload');
     });
 
     // Production (Globally Accessible for Task Logging, but can be restricted inside controller)

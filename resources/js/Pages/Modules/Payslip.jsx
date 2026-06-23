@@ -1,6 +1,9 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 
 export default function Payslip({ payroll }) {
+    const auth = usePage().props.auth;
+    const farmLogo = auth.user?.farm?.logo_path || '/logo.png';
+    const farmName = auth.user?.farm?.name || 'Rahinatu Farms LTD';
     const handlePrint = () => {
         window.print();
     };
@@ -28,9 +31,12 @@ export default function Payslip({ payroll }) {
                 <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200 p-8 print:shadow-none print:border-none print:p-0">
                     {/* Header */}
                     <div className="border-b-2 border-green-800 pb-6 mb-6 flex justify-between items-start">
-                        <div>
-                            <h1 className="text-3xl font-bold text-green-900">Rahinatu Farms LTD</h1>
-                            <p className="text-gray-500 mt-1">Official Employee Payslip</p>
+                        <div className="flex items-center gap-4">
+                            <img src={farmLogo} alt="Farm Logo" className="h-16 w-auto object-contain" />
+                            <div>
+                                <h1 className="text-3xl font-bold text-green-900">{farmName}</h1>
+                                <p className="text-gray-500 mt-1">Official Employee Payslip</p>
+                            </div>
                         </div>
                         <div className="text-right">
                             <h2 className="text-xl font-semibold text-gray-800">
@@ -95,7 +101,7 @@ export default function Payslip({ payroll }) {
                     {/* Footer */}
                     <div className="text-center text-sm text-gray-500 mt-12 pt-6 border-t border-gray-200">
                         <p>This is a system generated payslip.</p>
-                        <p className="mt-1">Rahinatu Farms LTD Enterprise Resource Planning System</p>
+                        <p className="mt-1">{farmName} Enterprise Resource Planning System</p>
                     </div>
                 </div>
             </div>

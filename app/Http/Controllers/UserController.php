@@ -51,6 +51,7 @@ class UserController extends Controller
         $department = \App\Models\Department::where('name', $request->department)->first();
 
         User::create([
+            'farm_id' => auth()->user()->farm_id,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make('password'), // Default password

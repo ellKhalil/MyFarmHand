@@ -7,9 +7,14 @@ import { useState } from 'react';
 
 export default function Settings({ departments = [] }) {
     const userRole = usePage().props.auth.user?.role?.role_name;
+    const farmLogo = usePage().props.auth.user?.farm?.logo_path;
     const { data, setData, post, processing, reset, errors } = useForm({
         name: '',
         base_salary: ''
+    });
+
+    const logoForm = useForm({
+        logo: null
     });
 
     const [editingDept, setEditingDept] = useState(null);
@@ -19,6 +24,14 @@ export default function Settings({ departments = [] }) {
         e.preventDefault();
         post(route('settings.departments.store'), {
             onSuccess: () => reset('name', 'base_salary'),
+        });
+    };
+
+    const submitLogo = (e) => {
+        e.preventDefault();
+        logoForm.post(route('settings.logo.upload'), {
+            preserveScroll: true,
+            onSuccess: () => logoForm.reset('logo'),
         });
     };
 
@@ -49,6 +62,40 @@ export default function Settings({ departments = [] }) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8">
+
+                    {userRole === 'Admin' && (
+                    <div className="bg-white p-6 shadow-sm border border-gray-200 rounded-sm">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Farm Branding</h3>
+                        <p className="text-sm text-gray-600 mb-6">
+                            Upload your farm's official logo. This logo will automatically appear on official documents like employee Payslips.
+                        </p>
+                        <div className="flex items-center gap-8">
+                            <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center overflow-hidden bg-gray-50 flex-shrink-0">
+                                {farmLogo ? (
+                                    <img src={farmLogo} alt="Farm Logo" className="w-full h-full object-contain" />
+                                ) : (
+                                    <span className="text-gray-400 text-sm text-center px-2">No Logo Uploaded</span>
+                                )}
+                            </div>
+                            <form onSubmit={submitLogo} className="flex-1 space-y-4 max-w-md">
+                                <div>
+                                    <InputLabel htmlFor="logo" value="Select Logo Image" />
+                                    <input 
+                                        type="file" 
+                                        id="logo"
+                                        accept="image/*"
+                                        onChange={(e) => logoForm.setData('logo', e.target.files[0])}
+                                        className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100" 
+                                    />
+                                    {logoForm.errors.logo && <div className="text-red-500 text-sm mt-1">{logoForm.errors.logo}</div>}
+                                </div>
+                                <PrimaryButton disabled={logoForm.processing || !logoForm.data.logo}>
+                                    Upload Logo
+                                </PrimaryButton>
+                            </form>
+                        </div>
+                    </div>
+                    )}
                     
                     <div className="bg-white p-6 shadow-sm border border-gray-200 rounded-sm">
                         <h3 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Manage Departments</h3>

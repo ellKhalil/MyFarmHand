@@ -54,4 +54,21 @@ class SettingsController extends Controller
         $department->delete();
         return redirect()->back()->with('success', 'Department removed successfully.');
     }
+
+    public function uploadLogo(Request $request)
+    {
+        $request->validate([
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $user = auth()->user();
+        $farm = \App\Models\Farm::find($user->farm_id);
+
+        if ($request->file('logo')) {
+            $path = $request->file('logo')->store('logos', 'public');
+            $farm->update(['logo_path' => '/storage/' . $path]);
+        }
+
+        return redirect()->back()->with('success', 'Farm logo updated successfully.');
+    }
 }
