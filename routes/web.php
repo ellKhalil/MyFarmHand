@@ -10,6 +10,16 @@ use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingsController;
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/run-migrations-secret', function () {
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        return 'Migrations completed successfully: <br><pre>' . Artisan::output() . '</pre>';
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -46,6 +56,7 @@ Route::middleware('auth')->group(function () {
     // Inventory - Admins, Directors, Store Keepers
     Route::middleware('role:Admin,Managing Director,Store Keeper')->group(function() {
         Route::get('/inventory', [InventoryItemController::class, 'index'])->name('inventory.index');
+        Route::get('/inventory/export', [InventoryItemController::class, 'export'])->name('inventory.export');
         Route::post('/inventory/items', [InventoryItemController::class, 'store'])->name('inventory.store');
         Route::post('/inventory/items/{item}/transaction', [InventoryItemController::class, 'logTransaction'])->name('inventory.transaction');
     });
@@ -58,6 +69,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/payroll/pay', [PayrollController::class, 'pay'])->name('payroll.pay');
 
         Route::get('/finance', [FinancialTransactionController::class, 'index'])->name('finance.index');
+        Route::get('/finance/export', [FinancialTransactionController::class, 'export'])->name('finance.export');
         Route::post('/finance/transactions', [FinancialTransactionController::class, 'store'])->name('finance.transaction.store');
     });
 

@@ -55,7 +55,13 @@ export default function Inventory({ inventory, filters = {} }) {
                     {/* Inventory Table */}
                     <div className="bg-white shadow-sm border border-gray-200 rounded-sm overflow-visible">
                         <div className="p-6 border-b bg-gray-50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-                            <h3 className="text-lg font-bold text-gray-800">Current Stock Levels</h3>
+                            <div className="flex items-center gap-4">
+                                <h3 className="text-lg font-bold text-gray-800">Current Stock Levels</h3>
+                                <a href={route('inventory.export')} className="text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded shadow-sm transition-colors flex items-center gap-1">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    Export CSV
+                                </a>
+                            </div>
                             <form onSubmit={handleSearch} className="flex flex-col sm:flex-row w-full sm:w-auto gap-3">
                                 <div className="flex w-full sm:w-64">
                                     <input

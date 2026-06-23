@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -39,11 +40,19 @@ class TaskController extends Controller
             'due_date' => 'nullable|date',
         ]);
 
-        Task::create([
+        $task = Task::create([
             ...$validated,
             'created_by' => Auth::id(),
             'status' => 'Pending',
         ]);
+
+        if ($task->assigned_to) {
+            Notification::create([
+                'user_id' => $task->assigned_to,
+                'type' => 'New Task',
+                'message' => "You have been assigned a new task: {$task->title}",
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Task assigned successfully.');
     }
