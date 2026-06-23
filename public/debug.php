@@ -25,6 +25,31 @@ foreach ($cacheFiles as $file) {
 }
 echo "<br><strong>Cache cleared successfully!</strong><br><hr>";
 
+echo "<h2>Fixing Dependencies (Composer)...</h2>";
+$baseDir = dirname(__DIR__);
+
+// Download composer if not exists
+if (!file_exists($baseDir . '/composer.phar')) {
+    echo "Downloading composer.phar...<br>";
+    copy('https://getcomposer.org/download/latest-stable/composer.phar', $baseDir . '/composer.phar');
+}
+
+// Run composer install --optimize-autoloader --no-dev
+putenv('COMPOSER_HOME=' . $baseDir . '/storage/framework/cache');
+$output = [];
+$return_var = 0;
+exec('php ' . escapeshellarg($baseDir . '/composer.phar') . ' install --optimize-autoloader --no-dev -d ' . escapeshellarg($baseDir) . ' 2>&1', $output, $return_var);
+
+echo "<pre style='background: #333; color: #fff; padding: 10px;'>";
+echo implode("\n", $output);
+echo "</pre>";
+
+if ($return_var !== 0) {
+    echo "<strong style='color:red;'>Composer failed with code $return_var</strong><br><hr>";
+} else {
+    echo "<strong style='color:green;'>Composer finished successfully!</strong><br><hr>";
+}
+
 echo "<h2>Running Database Migrations...</h2>";
 require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
