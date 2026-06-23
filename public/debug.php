@@ -25,30 +25,51 @@ foreach ($cacheFiles as $file) {
 }
 echo "<br><strong>Cache cleared successfully!</strong><br><hr>";
 
-echo "<h2>Fixing Dependencies (Composer)...</h2>";
+echo "<h2>Fixing Package Discovery...</h2>";
 $baseDir = dirname(__DIR__);
 
-// Download composer if not exists
-if (!file_exists($baseDir . '/composer.phar')) {
-    echo "Downloading composer.phar...<br>";
-    copy('https://getcomposer.org/download/latest-stable/composer.phar', $baseDir . '/composer.phar');
+// 1. Remove Dev Dependencies from installed.json to stop Laravel from looking for them
+$installedJsonPath = $baseDir . '/vendor/composer/installed.json';
+if (file_exists($installedJsonPath)) {
+    $data = json_decode(file_get_contents($installedJsonPath), true);
+    if (isset($data['packages'])) {
+        $devPackages = ['laravel/breeze', 'laravel/tinker', 'nunomaduro/collision', 'laravel/pail', 'laravel/pao', 'fakerphp/faker', 'laravel/pint', 'mockery/mockery', 'phpunit/phpunit'];
+        foreach ($data['packages'] as $k => $pkg) {
+            if (in_array($pkg['name'], $devPackages)) {
+                unset($data['packages'][$k]);
+            }
+        }
+        $data['packages'] = array_values($data['packages']);
+        file_put_contents($installedJsonPath, json_encode($data, JSON_PRETTY_PRINT));
+        echo "Cleaned vendor/composer/installed.json successfully!<br>";
+    }
 }
 
-// Run composer install --optimize-autoloader --no-dev
-putenv('COMPOSER_HOME=' . $baseDir . '/storage/framework/cache');
-$output = [];
-$return_var = 0;
-exec('php ' . escapeshellarg($baseDir . '/composer.phar') . ' install --optimize-autoloader --no-dev -d ' . escapeshellarg($baseDir) . ' 2>&1', $output, $return_var);
-
-echo "<pre style='background: #333; color: #fff; padding: 10px;'>";
-echo implode("\n", $output);
-echo "</pre>";
-
-if ($return_var !== 0) {
-    echo "<strong style='color:red;'>Composer failed with code $return_var</strong><br><hr>";
-} else {
-    echo "<strong style='color:green;'>Composer finished successfully!</strong><br><hr>";
+// 2. Also clean installed.php if it exists
+$installedPhpPath = $baseDir . '/vendor/composer/installed.php';
+if (file_exists($installedPhpPath)) {
+    $phpData = require $installedPhpPath;
+    $devPackages = ['laravel/breeze', 'laravel/tinker', 'nunomaduro/collision', 'laravel/pail', 'laravel/pao', 'fakerphp/faker', 'laravel/pint', 'mockery/mockery', 'phpunit/phpunit'];
+    if (isset($phpData['versions'])) {
+        foreach ($phpData['versions'] as $pkg => $val) {
+            if (in_array($pkg, $devPackages)) {
+                unset($phpData['versions'][$pkg]);
+            }
+        }
+    }
+    file_put_contents($installedPhpPath, "<?php return " . var_export($phpData, true) . ";");
+    echo "Cleaned vendor/composer/installed.php successfully!<br>";
 }
+
+// 3. Clear bootstrap/cache/packages.php
+if (file_exists($baseDir . '/bootstrap/cache/packages.php')) {
+    unlink($baseDir . '/bootstrap/cache/packages.php');
+}
+if (file_exists($baseDir . '/bootstrap/cache/services.php')) {
+    unlink($baseDir . '/bootstrap/cache/services.php');
+}
+
+echo "<strong>Package discovery fixed!</strong><br><hr>";
 
 echo "<h2>Running Database Migrations...</h2>";
 require __DIR__.'/../vendor/autoload.php';
