@@ -5,19 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Task;
+use App\Models\InventoryItem;
+use App\Models\FinancialTransaction;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-        // Generate some mock metrics for a premium feel
+        $user = Auth::user()->load('role');
+        
+        // Fetch real metrics from the database
+        $activeEmployees = User::count();
+        $pendingTasks = Task::where('status', '!=', 'completed')->count();
+        $inventoryAlerts = InventoryItem::where('quantity', '<', 50)->count();
+        $totalRevenue = FinancialTransaction::where('type', 'income')->sum('amount');
+        
         $metrics = [
-            'total_revenue' => '₦4,250,000',
-            'active_employees' => 24,
-            'pending_tasks' => 5,
-            'inventory_alerts' => 2
+            'total_revenue' => '₦' . number_format($totalRevenue, 2),
+            'active_employees' => $activeEmployees,
+            'pending_tasks' => $pendingTasks,
+            'inventory_alerts' => $inventoryAlerts
         ];
+
+        // Fetch recent activity (latest 5 tasks)
+        $recentActivity = Task::with('assignedUser')->latest()->take(5)->get();
         // Generate mock financial chart data for the last 6 months
         $chartData = [
             ['month' => 'Jan', 'Income' => 1200000, 'Expenses' => 800000],
@@ -31,7 +44,8 @@ class DashboardController extends Controller
         return Inertia::render('Dashboard', [
             'user' => $user,
             'metrics' => $metrics,
-            'chartData' => $chartData
+            'chartData' => $chartData,
+            'recentActivity' => $recentActivity
         ]);
     }
 }

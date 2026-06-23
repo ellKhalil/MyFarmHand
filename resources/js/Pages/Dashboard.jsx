@@ -1,9 +1,11 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage } from '@inertiajs/react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import WeatherWidget from '@/Components/WeatherWidget';
+import RecentActivity from '@/Components/RecentActivity';
 
-export default function Dashboard({ user, metrics, chartData }) {
-    const userRole = usePage().props.auth.user?.role?.role_name;
+export default function Dashboard({ user, metrics, chartData, recentActivity }) {
+    const userRole = usePage().props.auth.user?.role?.role_name || 'Employee';
 
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
@@ -36,193 +38,278 @@ export default function Dashboard({ user, metrics, chartData }) {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8">
                     
                     {/* Welcome Banner */}
-                    <div className="relative overflow-hidden bg-green-900 shadow-xl sm:rounded-2xl border border-green-800">
+                    <div className="relative overflow-hidden bg-green-900 shadow-md sm:rounded-xl border border-green-800 mb-6">
                         <div className="absolute inset-0 bg-gradient-to-r from-green-900 to-green-700 opacity-90"></div>
-                        <div className="absolute -right-20 -top-20 w-64 h-64 bg-green-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-                        <div className="relative px-8 py-10 sm:px-12 sm:py-16">
-                            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                                Welcome back, {user.name}
-                            </h1>
-                            <p className="mt-4 max-w-2xl text-lg text-green-100">
-                                Here is what is happening across your MyFarmHand enterprise today. You have quick access to payroll, inventory, and task tracking through the navigation menu.
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* KPI Cards */}
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                        {/* Card 1 */}
-                        <div className="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-300 transform hover:-translate-y-1">
-                            <div className="p-6">
-                                <div className="flex items-center">
-                                    <div className="flex-shrink-0 bg-blue-100 rounded-md p-3">
-                                        <svg className="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    </div>
-                                    <div className="ml-4 w-0 flex-1">
-                                        <dl>
-                                            <dt className="text-sm font-medium text-gray-500 truncate">Total Revenue</dt>
-                                            <dd className="text-2xl font-bold text-gray-900">{metrics?.total_revenue || '₦0'}</dd>
-                                        </dl>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="bg-gray-50 px-6 py-3">
-                                <div className="text-sm"><a href={route('finance.index')} className="font-medium text-blue-600 hover:text-blue-900">View ledgers →</a></div>
-                            </div>
-                        </div>
-
-                        {/* Card 2 */}
-                        <div className="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-300 transform hover:-translate-y-1">
-                            <div className="p-6">
-                                <div className="flex items-center">
-                                    <div className="flex-shrink-0 bg-green-100 rounded-md p-3">
-                                        <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                    </div>
-                                    <div className="ml-4 w-0 flex-1">
-                                        <dl>
-                                            <dt className="text-sm font-medium text-gray-500 truncate">Active Employees</dt>
-                                            <dd className="text-2xl font-bold text-gray-900">{metrics?.active_employees || 0}</dd>
-                                        </dl>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="bg-gray-50 px-6 py-3">
-                                <div className="text-sm"><a href={route('users.index')} className="font-medium text-green-600 hover:text-green-900">Manage team →</a></div>
-                            </div>
-                        </div>
-
-                        {/* Card 3 */}
-                        <div className="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-300 transform hover:-translate-y-1">
-                            <div className="p-6">
-                                <div className="flex items-center">
-                                    <div className="flex-shrink-0 bg-yellow-100 rounded-md p-3">
-                                        <svg className="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                                    </div>
-                                    <div className="ml-4 w-0 flex-1">
-                                        <dl>
-                                            <dt className="text-sm font-medium text-gray-500 truncate">Pending Tasks</dt>
-                                            <dd className="text-2xl font-bold text-gray-900">{metrics?.pending_tasks || 0}</dd>
-                                        </dl>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="bg-gray-50 px-6 py-3">
-                                <div className="text-sm"><a href={route('tasks.index')} className="font-medium text-yellow-600 hover:text-yellow-900">View tasks →</a></div>
-                            </div>
-                        </div>
-
-                        {/* Card 4 */}
-                        <div className="bg-white overflow-hidden shadow-sm rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-300 transform hover:-translate-y-1">
-                            <div className="p-6">
-                                <div className="flex items-center">
-                                    <div className="flex-shrink-0 bg-red-100 rounded-md p-3">
-                                        <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                    </div>
-                                    <div className="ml-4 w-0 flex-1">
-                                        <dl>
-                                            <dt className="text-sm font-medium text-gray-500 truncate">Inventory Alerts</dt>
-                                            <dd className="text-2xl font-bold text-gray-900">{metrics?.inventory_alerts || 0}</dd>
-                                        </dl>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="bg-gray-50 px-6 py-3">
-                                <div className="text-sm"><a href={route('inventory.index')} className="font-medium text-red-600 hover:text-red-900">Check stock →</a></div>
+                        <div className="absolute -right-10 -top-10 w-48 h-48 bg-green-500 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-blob"></div>
+                        <div className="relative px-6 py-6 sm:px-8 sm:py-8 flex flex-col sm:flex-row sm:items-center justify-between">
+                            <div>
+                                <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                                    Welcome back, {user.name}
+                                </h1>
+                                <p className="mt-2 max-w-2xl text-sm sm:text-base text-green-100">
+                                    Here is what is happening across your MyFarmHand enterprise today.
+                                </p>
                             </div>
                         </div>
                     </div>
 
-                    {/* Financial Performance Chart */}
-                    {chartData && (
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8 mt-8 hover:shadow-md transition-shadow duration-300">
-                            <div className="mb-6">
-                                <h3 className="text-lg font-bold text-gray-900">Financial Performance Overview</h3>
-                                <p className="text-sm text-gray-500">6-Month Revenue vs. Expenses trajectory</p>
+                    {/* Admin & Managing Director Dashboard */}
+                    {['Admin', 'System Administrator', 'Managing Director'].includes(userRole) && (
+                        <>
+                            {/* KPI Cards */}
+                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                                {/* Card 1 */}
+                                <div className="bg-white/80 backdrop-blur-lg overflow-hidden shadow-sm rounded-xl border border-gray-100/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 relative">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100 rounded-full mix-blend-multiply filter blur-2xl opacity-50 -mr-10 -mt-10"></div>
+                                    <div className="p-6 relative z-10">
+                                        <div className="flex items-center">
+                                            <div className="flex-shrink-0 bg-blue-100 rounded-lg p-3">
+                                                <svg className="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            </div>
+                                            <div className="ml-4 w-0 flex-1">
+                                                <dl>
+                                                    <dt className="text-sm font-medium text-gray-500 truncate">Total Revenue</dt>
+                                                    <dd className="text-2xl font-bold text-gray-900">{metrics?.total_revenue || '₦0'}</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-gray-50/50 px-6 py-3 border-t border-gray-100">
+                                        <div className="text-sm"><a href={route('finance.index')} className="font-medium text-blue-600 hover:text-blue-900">View ledgers →</a></div>
+                                    </div>
+                                </div>
+
+                                {/* Card 2 */}
+                                <div className="bg-white/80 backdrop-blur-lg overflow-hidden shadow-sm rounded-xl border border-gray-100/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 relative">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-green-100 rounded-full mix-blend-multiply filter blur-2xl opacity-50 -mr-10 -mt-10"></div>
+                                    <div className="p-6 relative z-10">
+                                        <div className="flex items-center">
+                                            <div className="flex-shrink-0 bg-green-100 rounded-lg p-3">
+                                                <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                            </div>
+                                            <div className="ml-4 w-0 flex-1">
+                                                <dl>
+                                                    <dt className="text-sm font-medium text-gray-500 truncate">Active Employees</dt>
+                                                    <dd className="text-2xl font-bold text-gray-900">{metrics?.active_employees || 0}</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-gray-50/50 px-6 py-3 border-t border-gray-100">
+                                        <div className="text-sm"><a href={route('users.index')} className="font-medium text-green-600 hover:text-green-900">Manage team →</a></div>
+                                    </div>
+                                </div>
+
+                                {/* Card 3 */}
+                                <div className="bg-white/80 backdrop-blur-lg overflow-hidden shadow-sm rounded-xl border border-gray-100/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 relative">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-100 rounded-full mix-blend-multiply filter blur-2xl opacity-50 -mr-10 -mt-10"></div>
+                                    <div className="p-6 relative z-10">
+                                        <div className="flex items-center">
+                                            <div className="flex-shrink-0 bg-yellow-100 rounded-lg p-3">
+                                                <svg className="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                                            </div>
+                                            <div className="ml-4 w-0 flex-1">
+                                                <dl>
+                                                    <dt className="text-sm font-medium text-gray-500 truncate">Pending Tasks</dt>
+                                                    <dd className="text-2xl font-bold text-gray-900">{metrics?.pending_tasks || 0}</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-gray-50/50 px-6 py-3 border-t border-gray-100">
+                                        <div className="text-sm"><a href={route('tasks.index')} className="font-medium text-yellow-600 hover:text-yellow-900">View tasks →</a></div>
+                                    </div>
+                                </div>
+
+                                {/* Card 4 */}
+                                <div className="bg-white/80 backdrop-blur-lg overflow-hidden shadow-sm rounded-xl border border-gray-100/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 relative">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-red-100 rounded-full mix-blend-multiply filter blur-2xl opacity-50 -mr-10 -mt-10"></div>
+                                    <div className="p-6 relative z-10">
+                                        <div className="flex items-center">
+                                            <div className="flex-shrink-0 bg-red-100 rounded-lg p-3">
+                                                <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                            </div>
+                                            <div className="ml-4 w-0 flex-1">
+                                                <dl>
+                                                    <dt className="text-sm font-medium text-gray-500 truncate">Inventory Alerts</dt>
+                                                    <dd className="text-2xl font-bold text-gray-900">{metrics?.inventory_alerts || 0}</dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-gray-50/50 px-6 py-3 border-t border-gray-100">
+                                        <div className="text-sm"><a href={route('inventory.index')} className="font-medium text-red-600 hover:text-red-900">Check stock →</a></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="h-80 w-full">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <AreaChart
-                                        data={chartData}
-                                        margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                                    >
-                                        <defs>
-                                            <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor="#10B981" stopOpacity={0.3}/>
-                                                <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
-                                            </linearGradient>
-                                            <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor="#EF4444" stopOpacity={0.3}/>
-                                                <stop offset="95%" stopColor="#EF4444" stopOpacity={0}/>
-                                            </linearGradient>
-                                        </defs>
-                                        <XAxis dataKey="month" stroke="#9CA3AF" tick={{ fill: '#6B7280', fontSize: 12 }} tickLine={false} axisLine={false} />
-                                        <YAxis stroke="#9CA3AF" tick={{ fill: '#6B7280', fontSize: 12 }} tickLine={false} axisLine={false} tickFormatter={(value) => `₦${(value / 1000).toFixed(0)}k`} />
-                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-                                        <Tooltip content={<CustomTooltip />} />
-                                        <Area type="monotone" dataKey="Income" stroke="#10B981" strokeWidth={3} fillOpacity={1} fill="url(#colorIncome)" />
-                                        <Area type="monotone" dataKey="Expenses" stroke="#EF4444" strokeWidth={3} fillOpacity={1} fill="url(#colorExpense)" />
-                                    </AreaChart>
-                                </ResponsiveContainer>
+
+                            {/* Chart & Weather Row */}
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+                                <div className="lg:col-span-2">
+                                    {chartData && (
+                                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-full hover:shadow-md transition-shadow duration-300">
+                                            <div className="mb-6">
+                                                <h3 className="text-lg font-bold text-gray-900">Financial Performance Overview</h3>
+                                                <p className="text-sm text-gray-500">6-Month Revenue vs. Expenses trajectory</p>
+                                            </div>
+                                            <div className="h-72 w-full">
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <AreaChart
+                                                        data={chartData}
+                                                        margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                                                    >
+                                                        <defs>
+                                                            <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
+                                                                <stop offset="5%" stopColor="#10B981" stopOpacity={0.3}/>
+                                                                <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                                                            </linearGradient>
+                                                            <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
+                                                                <stop offset="5%" stopColor="#EF4444" stopOpacity={0.3}/>
+                                                                <stop offset="95%" stopColor="#EF4444" stopOpacity={0}/>
+                                                            </linearGradient>
+                                                        </defs>
+                                                        <XAxis dataKey="month" stroke="#9CA3AF" tick={{ fill: '#6B7280', fontSize: 12 }} tickLine={false} axisLine={false} />
+                                                        <YAxis stroke="#9CA3AF" tick={{ fill: '#6B7280', fontSize: 12 }} tickLine={false} axisLine={false} tickFormatter={(value) => `₦${(value / 1000).toFixed(0)}k`} />
+                                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+                                                        <Tooltip content={<CustomTooltip />} />
+                                                        <Area type="monotone" dataKey="Income" stroke="#10B981" strokeWidth={3} fillOpacity={1} fill="url(#colorIncome)" />
+                                                        <Area type="monotone" dataKey="Expenses" stroke="#EF4444" strokeWidth={3} fillOpacity={1} fill="url(#colorExpense)" />
+                                                    </AreaChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                <div>
+                                    <WeatherWidget />
+                                </div>
+                            </div>
+
+                            {/* Quick Actions & System Notices Row */}
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                                {/* Quick Actions */}
+                                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                                    <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <a href={route('users.index')} className="flex items-center justify-center py-4 px-4 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-green-300 transition-colors">
+                                            <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                                            Onboard Employee
+                                        </a>
+                                        <a href={route('payroll.index')} className="flex items-center justify-center py-4 px-4 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-green-300 transition-colors">
+                                            <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                            Run Payroll
+                                        </a>
+                                        <a href={route('inventory.index')} className="flex items-center justify-center py-4 px-4 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-green-300 transition-colors">
+                                            <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                                            Log Inventory
+                                        </a>
+                                        <a href={route('finance.index')} className="flex items-center justify-center py-4 px-4 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-green-300 transition-colors">
+                                            <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            Record Transaction
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {/* Status / Notice Board */}
+                                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                                    <h3 className="text-lg font-bold text-gray-900 mb-4">System Notices (Info)</h3>
+                                    <ul className="divide-y divide-gray-100">
+                                        <li className="py-3 flex items-start">
+                                            <span className="h-2 w-2 mt-2 rounded-full bg-green-500 mr-3 flex-shrink-0"></span>
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-900">System updated to v2.0</p>
+                                                <p className="text-xs text-gray-500">Includes new Payroll routing and UI customizations.</p>
+                                            </div>
+                                        </li>
+                                        <li className="py-3 flex items-start">
+                                            <span className="h-2 w-2 mt-2 rounded-full bg-blue-500 mr-3 flex-shrink-0"></span>
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-900">Monthly financial audit approaching</p>
+                                                <p className="text-xs text-gray-500">Ensure all ledgers are updated by the end of the week.</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </>
+                    )}
+
+                    {/* Accountant Dashboard */}
+                    {['Accountant'].includes(userRole) && (
+                        <>
+                            {chartData && (
+                                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8 mt-8 hover:shadow-md transition-shadow duration-300">
+                                    <div className="mb-6">
+                                        <h3 className="text-lg font-bold text-gray-900">Financial Performance Overview</h3>
+                                        <p className="text-sm text-gray-500">6-Month Revenue vs. Expenses trajectory</p>
+                                    </div>
+                                    <div className="h-80 w-full">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <AreaChart
+                                                data={chartData}
+                                                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                                            >
+                                                <defs>
+                                                    <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="5%" stopColor="#10B981" stopOpacity={0.3}/>
+                                                        <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                                                    </linearGradient>
+                                                    <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="5%" stopColor="#EF4444" stopOpacity={0.3}/>
+                                                        <stop offset="95%" stopColor="#EF4444" stopOpacity={0}/>
+                                                    </linearGradient>
+                                                </defs>
+                                                <XAxis dataKey="month" stroke="#9CA3AF" tick={{ fill: '#6B7280', fontSize: 12 }} tickLine={false} axisLine={false} />
+                                                <YAxis stroke="#9CA3AF" tick={{ fill: '#6B7280', fontSize: 12 }} tickLine={false} axisLine={false} tickFormatter={(value) => `₦${(value / 1000).toFixed(0)}k`} />
+                                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+                                                <Tooltip content={<CustomTooltip />} />
+                                                <Area type="monotone" dataKey="Income" stroke="#10B981" strokeWidth={3} fillOpacity={1} fill="url(#colorIncome)" />
+                                                <Area type="monotone" dataKey="Expenses" stroke="#EF4444" strokeWidth={3} fillOpacity={1} fill="url(#colorExpense)" />
+                                            </AreaChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="mt-8">
+                                {/* Removed task feed */}
+                            </div>
+                        </>
+                    )}
+
+                    {/* Employee / General Staff Dashboard */}
+                    {!['Admin', 'System Administrator', 'Managing Director', 'Accountant'].includes(userRole) && (
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+                            <div className="lg:col-span-2">
+                                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-full">
+                                    <h3 className="text-lg font-bold text-gray-900 mb-4">My Pending Tasks</h3>
+                                    {recentActivity?.length > 0 ? (
+                                        <ul className="divide-y divide-gray-100">
+                                            {recentActivity.map((task) => (
+                                                <li key={task.id} className="py-4">
+                                                    <div className="flex space-x-3">
+                                                        <div className="flex-1 space-y-1">
+                                                            <div className="flex items-center justify-between">
+                                                                <h3 className="text-sm font-medium text-gray-900">{task.title}</h3>
+                                                                <span className="text-sm text-gray-500">{new Date(task.updated_at).toLocaleDateString()}</span>
+                                                            </div>
+                                                            <p className="text-sm text-gray-500">{task.description}</p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p className="text-gray-500 text-sm">You have no pending tasks right now. Great job!</p>
+                                    )}
+                                </div>
+                            </div>
+                            <div>
+                                <WeatherWidget />
                             </div>
                         </div>
                     )}
-
-                    {/* Quick Actions & Recent Activity */}
-                    <div className={userRole !== 'Managing Director' ? "grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8" : "mt-8"}>
-                        {/* Quick Actions */}
-                        {userRole !== 'Managing Director' && (
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                            <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
-                            <div className="grid grid-cols-2 gap-4">
-                                {['Admin'].includes(userRole) && (
-                                <a href={route('users.index')} className="flex items-center justify-center py-4 px-4 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-green-300 transition-colors">
-                                    <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
-                                    Onboard Employee
-                                </a>
-                                )}
-                                {['Admin', 'Accountant'].includes(userRole) && (
-                                <a href={route('payroll.index')} className="flex items-center justify-center py-4 px-4 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-green-300 transition-colors">
-                                    <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                    Run Payroll
-                                </a>
-                                )}
-                                {['Admin', 'Store Keeper'].includes(userRole) && (
-                                <a href={route('inventory.index')} className="flex items-center justify-center py-4 px-4 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-green-300 transition-colors">
-                                    <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                                    Log Inventory
-                                </a>
-                                )}
-                                {['Admin', 'Accountant'].includes(userRole) && (
-                                <a href={route('finance.index')} className="flex items-center justify-center py-4 px-4 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-green-300 transition-colors">
-                                    <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    Record Transaction
-                                </a>
-                                )}
-                            </div>
-                        </div>
-                        )}
-
-                        {/* Status / Notice Board */}
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                            <h3 className="text-lg font-bold text-gray-900 mb-4">System Notices</h3>
-                            <ul className="divide-y divide-gray-100">
-                                <li className="py-3 flex items-start">
-                                    <span className="h-2 w-2 mt-2 rounded-full bg-green-500 mr-3 flex-shrink-0"></span>
-                                    <div>
-                                        <p className="text-sm font-medium text-gray-900">System updated to v2.0</p>
-                                        <p className="text-xs text-gray-500">Includes new Payroll routing and UI customizations.</p>
-                                    </div>
-                                </li>
-                                <li className="py-3 flex items-start">
-                                    <span className="h-2 w-2 mt-2 rounded-full bg-blue-500 mr-3 flex-shrink-0"></span>
-                                    <div>
-                                        <p className="text-sm font-medium text-gray-900">Monthly financial audit approaching</p>
-                                        <p className="text-xs text-gray-500">Ensure all ledgers are updated by the end of the week.</p>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
 
                 </div>
             </div>
