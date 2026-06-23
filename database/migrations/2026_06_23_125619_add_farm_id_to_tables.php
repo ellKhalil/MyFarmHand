@@ -13,9 +13,11 @@ return new class extends Migration
     {
         $tables = ['users', 'inventory_items', 'financial_transactions', 'production_batches', 'tasks', 'departments'];
         foreach ($tables as $tableName) {
-            Schema::table($tableName, function (Blueprint $table) {
-                $table->foreignId('farm_id')->nullable()->constrained('farms')->cascadeOnDelete();
-            });
+            if (!Schema::hasColumn($tableName, 'farm_id')) {
+                Schema::table($tableName, function (Blueprint $table) {
+                    $table->foreignId('farm_id')->nullable()->constrained('farms')->cascadeOnDelete();
+                });
+            }
         }
         
         Schema::table('users', function (Blueprint $table) {
