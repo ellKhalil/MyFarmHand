@@ -118,39 +118,4 @@ class InventoryItemController extends Controller
             ]);
         }
     }
-
-    public function export()
-    {
-        $items = InventoryItem::orderBy('item_name', 'asc')->get();
-
-        $headers = [
-            "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=inventory_report_" . date('Y-m-d') . ".csv",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
-        ];
-
-        $columns = ['Item Name', 'Category', 'Quantity', 'Unit', 'Cost Per Unit (NGN)', 'Low Stock Threshold'];
-
-        $callback = function() use($items, $columns) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, $columns);
-
-            foreach ($items as $item) {
-                $row['Name']  = $item->item_name;
-                $row['Category']    = $item->category;
-                $row['Quantity']  = $item->quantity;
-                $row['Unit']  = $item->unit;
-                $row['Cost']  = $item->cost_per_unit;
-                $row['Threshold']  = $item->low_stock_threshold;
-
-                fputcsv($file, array($row['Name'], $row['Category'], $row['Quantity'], $row['Unit'], $row['Cost'], $row['Threshold']));
-            }
-
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
-    }
 }
