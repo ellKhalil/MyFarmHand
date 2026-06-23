@@ -21,6 +21,16 @@ Route::get('/run-migrations-secret', function () {
     }
 });
 
+Route::get('/debug-log', function () {
+    $logPath = storage_path('logs/laravel.log');
+    if (!file_exists($logPath)) return 'No log file found.';
+    
+    // Read the last 100 lines
+    $lines = file($logPath);
+    $lastLines = array_slice($lines, -100);
+    return '<pre>' . implode("", $lastLines) . '</pre>';
+});
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
